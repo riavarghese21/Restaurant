@@ -95,7 +95,7 @@ public class ButtonLabelTextFieldDemo {
 	// Adds a new customer to the 'Customers' table that has values specified by the user (using the text fields)
 	public void addCustomCustomer() {
 		try {
-			Connection connection = Database.connection;
+			Connection connection = Database.getConnection();
 			String query = "INSERT INTO Customers VALUES (?, ?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
 			

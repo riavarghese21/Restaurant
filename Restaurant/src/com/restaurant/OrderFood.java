@@ -17,8 +17,10 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class OrderFood {
 
@@ -54,8 +56,9 @@ public class OrderFood {
 
         // Title
         JLabel OrderOnlineLabel = new JLabel("Order Online");
-        OrderOnlineLabel.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-        OrderOnlineLabel.setBounds(356, 6, 107, 16);
+        OrderOnlineLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        OrderOnlineLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+        OrderOnlineLabel.setBounds(350, 22, 124, 16);
         frame.getContentPane().add(OrderOnlineLabel);
 
         // Menu Table
@@ -64,45 +67,48 @@ public class OrderFood {
         table = new JTable(model);
 
         JScrollPane Menu = new JScrollPane(table);
-        Menu.setBounds(52, 88, 400, 400);
+        Menu.setBounds(52, 94, 400, 383);
         frame.getContentPane().add(Menu);
 
         JLabel MenuLabel = new JLabel("Menu");
-        MenuLabel.setBounds(235, 65, 34, 16);
+        MenuLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        MenuLabel.setBounds(239, 66, 34, 16);
         frame.getContentPane().add(MenuLabel);
        
 
         // Item Name Field
         JLabel NameLabel = new JLabel("Name");
-        NameLabel.setBounds(586, 76, 61, 16);
+        NameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        NameLabel.setBounds(586, 123, 48, 16);
         frame.getContentPane().add(NameLabel);
 
         ItemNameTextField = new JTextField();
-        ItemNameTextField.setBounds(503, 104, 214, 26);
+        ItemNameTextField.setBounds(503, 151, 214, 26);
         frame.getContentPane().add(ItemNameTextField);
         ItemNameTextField.setColumns(10);
 
         // Price Field
         JLabel PriceLabel = new JLabel("Price");
-        PriceLabel.setBounds(586, 161, 61, 16);
+        PriceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        PriceLabel.setBounds(586, 192, 48, 16);
         frame.getContentPane().add(PriceLabel);
 
         PriceTextField = new JTextField();
-        PriceTextField.setBounds(503, 189, 213, 26);
+        PriceTextField.setBounds(504, 213, 213, 26);
         frame.getContentPane().add(PriceTextField);
         PriceTextField.setColumns(10);
 
-        // Quantity Spinner
+        // Quantity
         JLabel QuantityLabel = new JLabel("Quantity");
-        QuantityLabel.setBounds(586, 254, 61, 16);
+        QuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        QuantityLabel.setBounds(586, 258, 61, 16);
         frame.getContentPane().add(QuantityLabel);
 
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
         JSpinner QuantitySpinner = new JSpinner(spinnerModel);
-        QuantitySpinner.setBounds(503, 282, 213, 26);
+        QuantitySpinner.setBounds(504, 286, 213, 26);
         frame.getContentPane().add(QuantitySpinner);
 
-        // Update Total When Quantity Changes
         QuantitySpinner.addChangeListener(e -> {
             try {
                 int quantity = (int) QuantitySpinner.getValue();
@@ -119,19 +125,20 @@ public class OrderFood {
             }
         });
 
-        // Total Field
+        // Total
         JLabel TotalLabel = new JLabel("Total");
-        TotalLabel.setBounds(586, 358, 61, 16);
+        TotalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        TotalLabel.setBounds(586, 324, 48, 16);
         frame.getContentPane().add(TotalLabel);
 
         TotalTextField = new JTextField();
-        TotalTextField.setBounds(504, 386, 213, 26);
+        TotalTextField.setBounds(504, 352, 213, 26);
         frame.getContentPane().add(TotalTextField);
         TotalTextField.setColumns(10);
 
-        // Add to Cart Button
+        // Add to Cart
         JButton AddToCartButton = new JButton("Add to Cart");
-        AddToCartButton.setBounds(559, 449, 117, 29);
+        AddToCartButton.setBounds(559, 416, 117, 29);
         frame.getContentPane().add(AddToCartButton);
         
         AddToCartButton.addActionListener(new ActionListener() {
@@ -171,27 +178,26 @@ public class OrderFood {
 
         // Back Button
         JButton BackButton = new JButton("Back");
-        BackButton.setBounds(173, 514, 117, 29);
+        BackButton.setBounds(265, 515, 117, 29);
         frame.getContentPane().add(BackButton);
         
        
-        //"View Cart"
+        //View Cart
         JButton ViewCartButton = new JButton("View Cart");
-        ViewCartButton.setBounds(447, 514, 117, 29);
+        ViewCartButton.setBounds(517, 515, 117, 29);
         frame.getContentPane().add(ViewCartButton);
 
-        // ActionListener for "View Cart"
+        
         ViewCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Cart cartPage = Cart.getInstance(); // Assuming Cart is implemented as a singleton
-                cartPage.setVisible(true); // Show the Cart JFrame
-                frame.setVisible(false);  // Hide the current JFrame (OrderFood)
+                Cart cartPage = Cart.getInstance(); 
+                cartPage.setVisible(true); 
+                frame.setVisible(false);  
             }
         });
 
        
-        // Table Selection Listener
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -214,7 +220,11 @@ public class OrderFood {
     
     private void loadMenuItems() {
         try {
-        	Connection connection = Database.getConnection();
+            Connection connection = Database.getConnection();
+            if (connection == null) {
+                System.out.println("Failed to connect to the database.");
+                return;
+            }
             String query = "SELECT item_name, item_price FROM Menu";
             PreparedStatement stm = connection.prepareStatement(query);
             ResultSet rs = stm.executeQuery();
@@ -225,8 +235,8 @@ public class OrderFood {
                 model.addRow(new Object[]{name, "$" + price});
             }
             System.out.println("Menu items loaded successfully.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error while loading menu items: " + e.getMessage());
         }
     }
 }

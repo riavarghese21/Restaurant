@@ -52,13 +52,14 @@ public class SignInPage {
 	
 	// Handles closing the database connection if the user closes the program
 	public static void setupClosingDBConnection() {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 	        public void run() {
-	            try { Database.connection.close(); System.out.println("Application Closed - DB Connection Closed");
-				} catch (SQLException e) { e.printStackTrace(); }
+	            Database.closeConnection(); // Use the closeConnection() method to close the connection
 	        }
 	    }, "Shutdown-thread"));
 	}
+
+
 	public void customerSignInButton() {
 		JButton newCustomerButton = new JButton("Customer Sign in");
 		newCustomerButton.setBounds(72, 52, 310, 29);
