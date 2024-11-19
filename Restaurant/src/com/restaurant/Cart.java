@@ -15,6 +15,7 @@ import javax.swing.JSpinner;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class Cart {
 
@@ -80,7 +81,8 @@ public class Cart {
         frame.getContentPane().add(CartScrollPane);
 
         JLabel CartLabel = new JLabel("Cart");
-        CartLabel.setBounds(250, 35, 34, 16);
+        CartLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        CartLabel.setBounds(247, 41, 34, 16);
         frame.getContentPane().add(CartLabel);
 
         // Remove From Cart Button
@@ -104,6 +106,7 @@ public class Cart {
 
         // Quantity Spinner
         JLabel QuantityLabel = new JLabel("Modify Quantity:");
+        QuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
         QuantityLabel.setBounds(579, 264, 105, 16);
         frame.getContentPane().add(QuantityLabel);
 
@@ -163,7 +166,7 @@ public class Cart {
         // Title
         ViewCartLabel = new JLabel("View Cart");
         ViewCartLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-        ViewCartLabel.setBounds(373, 6, 88, 16);
+        ViewCartLabel.setBounds(377, 16, 88, 16);
         frame.getContentPane().add(ViewCartLabel);
 
         // Back Button
@@ -182,6 +185,7 @@ public class Cart {
 
         // Total Cost Label and Field
         JLabel TotalLabel = new JLabel("Your Total is: ");
+        TotalLabel.setHorizontalAlignment(SwingConstants.CENTER);
         TotalLabel.setBounds(503, 424, 88, 16);
         frame.getContentPane().add(TotalLabel);
 
@@ -190,7 +194,6 @@ public class Cart {
         TotalCost.setEditable(false);
         frame.getContentPane().add(TotalCost);
 
-        // Add listener for row selection
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -207,13 +210,10 @@ public class Cart {
         updateTotalCost();
     }
 
-    // Method to add items to the cart
     public void addToCart(String name, double price, int quantity, double total) {
-        // Iterate through the rows to check if the item already exists
         for (int i = 0; i < model.getRowCount(); i++) {
             String existingName = model.getValueAt(i, 0).toString();
             if (existingName.equals(name)) {
-                // Item already exists, update the quantity and total
                 int existingQuantity = (int) model.getValueAt(i, 2);
                 int newQuantity = existingQuantity + quantity;
                 double newTotal = newQuantity * price;
@@ -225,13 +225,11 @@ public class Cart {
             }
         }
 
-        // If the item does not exist, add it as a new row
         model.addRow(new Object[]{name, "$" + String.format("%.2f", price), quantity, "$" + String.format("%.2f", total)});
         updateTotalCost();
     }
 
 
-    // Method to update the total cost of items in the cart
     private void updateTotalCost() {
         double totalCost = 0.0;
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -241,7 +239,6 @@ public class Cart {
         TotalCost.setText("$" + String.format("%.2f", totalCost));
     }
 
-    // Method to set Cart frame visibility
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
     }
