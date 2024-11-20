@@ -158,12 +158,11 @@ public class OrderFood {
                     double price = Double.parseDouble(priceText.replace("$", ""));
                     double total = Double.parseDouble(totalText.replace("$", ""));
                     
-                    Cart cartPage = Cart.getInstance(); // Get the shared instance of Cart
-                    cartPage.addToCart(name, price, quantity, total); // Add item to the cart
+                    Cart cartPage = Cart.getInstance(); 
+                    cartPage.addToCart(name, price, quantity, total); 
 
                     JOptionPane.showMessageDialog(frame, "You items have been added to the cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Clear fields after adding to cart
                     ItemNameTextField.setText("");
                     PriceTextField.setText("");
                     QuantitySpinner.setValue(1);

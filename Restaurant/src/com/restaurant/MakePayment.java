@@ -153,7 +153,7 @@ public class MakePayment {
         StateComboBox.setBounds(205, 385, 164, 26);
         frame.getContentPane().add(StateComboBox);
 
-        // Place Order Button Listener
+        // Place Order Button
         PlaceOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -162,7 +162,6 @@ public class MakePayment {
                 String selectedYear = ExpirationYearComboBox.getSelectedItem().toString();
                 String selectedMonth = (String) ExpirationMonthComboBox.getSelectedItem();
 
-                // Validate inputs
                 if ("Card Type".equals(selectedCardType)) {
                     JOptionPane.showMessageDialog(frame, "Please select a valid card type.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -176,7 +175,6 @@ public class MakePayment {
                     return;
                 }
 
-                // Insert data into database
                 try {
                     String cardNumber = CardNumber.getText();
                     String firstName = FirstName.getText();
@@ -186,7 +184,6 @@ public class MakePayment {
                     String city = City.getText();
                     String zipCode = ZipCode.getText();
 
-                    // Connect to the database
                     Connection connection = Database.getConnection();
                     if (connection == null) {
                         JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
