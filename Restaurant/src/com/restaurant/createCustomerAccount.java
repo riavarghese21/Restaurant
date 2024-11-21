@@ -76,8 +76,6 @@ public class createCustomerAccount {
 		frame.getContentPane().add(addressTF);
 		addressTF.setColumns(10);
 		
-		String addressString = addressTF.getText();
-		
 		JLabel usernameLBL = new JLabel("Username");
 		usernameLBL.setBounds(72, 11, 310, 14);
 		frame.getContentPane().add(usernameLBL);
@@ -120,19 +118,33 @@ public class createCustomerAccount {
 			String query = "INSERT INTO Customers VALUES (?, ?, ?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
 			
-			// 'Integer.parseInt(Insert String Here)' turns the 'String' between the parenthesis into an 'int' (unless there are letters inside of the String, then it will crash)
-			stm.setString(1, usernameTF.getText()); // patientIDTF.getText() gets the text that is inside of the patient id text field
-			stm.setString(2, pswdTF.getText()); // patientNameTF.getText() gets the text that is inside of the patient name text field
-			stm.setString(3, fullNameTF.getText()); // dateOfBirthTF.getText() gets the text that is inside of the dateOfBirth text field
+			stm.setString(1, usernameTF.getText());
+			stm.setString(2, pswdTF.getText());
+			stm.setString(3, fullNameTF.getText());
 			stm.setString(4,  addressTF.getText());
+
 			stm.executeUpdate();
-			// The line below is ran if the query executes successfully. It shows a JOptionPane (an alert) telling the user that the patient has been added to the database.
+			
+			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
+			PreparedStatement stm2 = connection.prepareStatement(query2);
+			stm2.setString(1, usernameTF.getText());
+			stm2.setString(2, pswdTF.getText());
+
+			stm2.executeUpdate();
+			
+			String query3 = "GRANT SELECT, UPDATE ON restaurantdb.Customers TO ?@'localhost'";
+			PreparedStatement stm3 = connection.prepareStatement(query3);
+			stm3.setString(1, usernameTF.getText());
+			
+			stm3.executeUpdate();
+			
+			
 			JOptionPane.showMessageDialog(null, "The new customer was added to the database!", "Customer Added!", JOptionPane.DEFAULT_OPTION);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-//Makes the UI look modern if the user is on Windows
+	//Makes the UI look modern if the user is on Windows
 	public void setLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
