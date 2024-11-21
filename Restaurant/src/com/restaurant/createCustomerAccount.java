@@ -139,7 +139,7 @@ public class createCustomerAccount {
 			stm3.executeUpdate();
 			
 			
-			JOptionPane.showMessageDialog(null, "The new customer was added to the database!", "Customer Added!", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Signed In Successfully!", "Signed In!", JOptionPane.DEFAULT_OPTION);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

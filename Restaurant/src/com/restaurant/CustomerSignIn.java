@@ -3,9 +3,7 @@ package com.restaurant;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.swing.JTextField;
@@ -13,7 +11,6 @@ import javax.swing.UIManager;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 public class CustomerSignIn {
 
@@ -82,8 +79,15 @@ public class CustomerSignIn {
 		signInBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				connect();
+				goToSignedInCustomer();
 			}
 		});
+	}
+	public void goToSignedInCustomer() {
+		frame.dispose();
+		SignedInCustomer SIC = new SignedInCustomer(); 
+		SIC.initialize();
+		SIC.frame.setVisible(true);
 	}
 	public void createAccountButton() {
 		JButton createAccountBtn = new JButton("Create Account");
