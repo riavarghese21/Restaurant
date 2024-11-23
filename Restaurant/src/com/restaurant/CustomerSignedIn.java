@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-public class SignedInCustomer {
+public class CustomerSignedIn {
 
 	public JFrame frame;
 
@@ -19,7 +19,7 @@ public class SignedInCustomer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SignedInCustomer window = new SignedInCustomer();
+					CustomerSignedIn window = new CustomerSignedIn();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,7 +31,7 @@ public class SignedInCustomer {
 	/**
 	 * Create the application.
 	 */
-	public SignedInCustomer() {
+	public CustomerSignedIn() {
 		initialize();
 	}
 
@@ -48,12 +48,13 @@ public class SignedInCustomer {
 		changePasswordButton();
 		changeNameButton();
 		changeAddressButton();
+		paymentInfoButton();
 	}
 	
 	public void changePasswordButton() {
 		frame.getContentPane().setLayout(null);
 		JButton changePasswordButton = new JButton("Change Password");
-		changePasswordButton.setBounds(57, 37, 310, 29);
+		changePasswordButton.setBounds(57, 49, 310, 29);
 		frame.getContentPane().add(changePasswordButton);
 		changePasswordButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -69,7 +70,7 @@ public class SignedInCustomer {
 	}
 	public void changeNameButton() {
 		JButton changeNameButton = new JButton("Change Name");
-		changeNameButton.setBounds(57, 106, 310, 29);
+		changeNameButton.setBounds(57, 89, 310, 29);
 		frame.getContentPane().add(changeNameButton);
 		changeNameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,11 +86,27 @@ public class SignedInCustomer {
 	}
 	public void changeAddressButton() {
 		JButton changeAddressButton = new JButton("Change Address");
-		changeAddressButton.setBounds(57, 186, 310, 29);
+		changeAddressButton.setBounds(57, 129, 310, 29);
 		frame.getContentPane().add(changeAddressButton);
 		changeAddressButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				goToCustomerChangeAddress();
+			}
+		});
+	}
+	public void goToCustomerPaymentInfo() {
+		frame.dispose();
+		CustomerPaymentInfo CPI = new CustomerPaymentInfo(); 
+		CPI.initialize();
+		CPI.frame.setVisible(true);
+	}
+	public void paymentInfoButton() {
+		JButton paymentInfoButton = new JButton("Enter Payment Information");
+		paymentInfoButton.setBounds(57, 209, 310, 29);
+		frame.getContentPane().add(paymentInfoButton);
+		paymentInfoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToCustomerPaymentInfo();
 			}
 		});
 	}

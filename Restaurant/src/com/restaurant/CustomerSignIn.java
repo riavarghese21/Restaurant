@@ -80,13 +80,13 @@ public class CustomerSignIn {
 			public void actionPerformed(ActionEvent e) {
 				connect();
 				//Add if statement so users with no account can't go to the page
-				goToSignedInCustomer();
+				goToCustomerSignedIn();
 			}
 		});
 	}
-	public void goToSignedInCustomer() {
+	public void goToCustomerSignedIn() {
 		frame.dispose();
-		SignedInCustomer SIC = new SignedInCustomer(); 
+		CustomerSignedIn SIC = new CustomerSignedIn(); 
 		SIC.initialize();
 		SIC.frame.setVisible(true);
 	}
