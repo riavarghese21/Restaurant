@@ -79,6 +79,7 @@ public class CustomerSignIn {
 		signInBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				connect();
+				//Add if statement so users with no account can't go to the page
 				goToSignedInCustomer();
 			}
 		});

@@ -124,7 +124,7 @@ public class createCustomerAccount {
 			stm.setString(4,  addressTF.getText());
 
 			stm.executeUpdate();
-			
+			//Can use roles instead (RBAC)
 			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
 			PreparedStatement stm2 = connection.prepareStatement(query2);
 			stm2.setString(1, usernameTF.getText());
@@ -139,7 +139,7 @@ public class createCustomerAccount {
 			stm3.executeUpdate();
 			
 			
-			JOptionPane.showMessageDialog(null, "Signed In Successfully!", "Signed In!", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Account Created Successfully!", "Signed In!", JOptionPane.DEFAULT_OPTION);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
