@@ -117,14 +117,16 @@ public class createCustomerAccount {
 			Connection connection = Database.connection;
 			String query = "INSERT INTO Customers VALUES (?, ?, ?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
-			
+			String encryptedPswd = Encryption.encrypt(pswdTF.getText());
 			stm.setString(1, usernameTF.getText());
-			stm.setString(2, pswdTF.getText());
+			stm.setString(2, encryptedPswd);
 			stm.setString(3, fullNameTF.getText());
 			stm.setString(4,  addressTF.getText());
 
 			stm.executeUpdate();
-			//Can use roles instead (RBAC)
+
+
+			
 			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
 			PreparedStatement stm2 = connection.prepareStatement(query2);
 			stm2.setString(1, usernameTF.getText());
@@ -156,5 +158,37 @@ public class createCustomerAccount {
 	            Database.closeConnection(); // Use the closeConnection() method to close the connection
 	        }
 	    }, "Shutdown-thread"));
+	}
+	
+	// Lets say a user is signing up. This code would add them to the database as a new user.
+	public static void insertUserIntoDatabase(int userID, String username, String encryptedPassword) {
+		try {
+			Connection connection = Database.connection;
+			// Let's say that there is a table in our 'doctors_office' database called 'Users' and it has the following columns: 'user_id' (int), 'username' (varchar/String), and 'password' (varchar/String)
+			String query = "INSERT INTO Users VALUES (?, ?, ?)";
+			PreparedStatement stm = connection.prepareStatement(query);
+			stm.setInt(1, userID); // <- This will be the new user's userID (not sensitive data - not encrypted)
+			stm.setString(2, username); // <- This will be the new user's username (not sensitive data - not encrypted)
+			stm.setString(3, encryptedPassword); // <- This will be the new user's password (sensitive data - encrypted)
+			stm.executeUpdate();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	// This method gets the encrypted password from the database for the newly created user and returns it back to where the method was called
+	public static String retrievePasswordFromDatabase(int userID) {
+		try {
+			Connection connection = Database.connection; // Connect to database
+			String query = "SELECT * FROM Users WHERE user_id = " + userID; // Enter the query
+			Statement stm = connection.createStatement(); // Create statement
+			ResultSet result = stm.executeQuery(query); // Execute the query
+			
+			result.first();
+			return result.getString("password");
+		} catch (Exception e) {
+			System.out.println(e);
+			return "";
+		}
 	}
 }
