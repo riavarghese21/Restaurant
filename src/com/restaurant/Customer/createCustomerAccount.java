@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import com.restaurant.Database;
+import com.restaurant.Encryption;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
