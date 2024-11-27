@@ -11,7 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class createCustomerAccount {
+public class CreateCustomerAccount {
 
 	public JFrame frame;
 	private JTextField usernameTF;
@@ -26,7 +26,7 @@ public class createCustomerAccount {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					createCustomerAccount window = new createCustomerAccount();
+					CreateCustomerAccount window = new CreateCustomerAccount();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class createCustomerAccount {
 	/**
 	 * Create the application.
 	 */
-	public createCustomerAccount() {
+	public CreateCustomerAccount() {
 		initialize();
 	}
 	

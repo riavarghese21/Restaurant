@@ -102,7 +102,7 @@ public class CustomerSignIn {
 	}
 	public void goToCreateAccountPage() {
 		frame.dispose();
-		createCustomerAccount CCA = new createCustomerAccount(); 
+		CreateCustomerAccount CCA = new CreateCustomerAccount(); 
 		CCA.initialize();
 		CCA.frame.setVisible(true);
 	}
