@@ -1,10 +1,10 @@
-package com.restaurant;
+package com.restaurant.Admin;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-public class EmployeeSignIn {
+public class AdminSignIn {
 
 	public JFrame frame;
 
@@ -15,7 +15,7 @@ public class EmployeeSignIn {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmployeeSignIn window = new EmployeeSignIn();
+					AdminSignIn window = new AdminSignIn();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -27,7 +27,7 @@ public class EmployeeSignIn {
 	/**
 	 * Create the application.
 	 */
-	public EmployeeSignIn() {
+	public AdminSignIn() {
 		initialize();
 	}
 
@@ -35,7 +35,7 @@ public class EmployeeSignIn {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Employee Sign in page");
+		frame = new JFrame("Admin Sign in page");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

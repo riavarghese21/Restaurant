@@ -1,4 +1,4 @@
-package com.restaurant;
+package com.restaurant.Customer;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+
+import com.restaurant.Database;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;

@@ -1,4 +1,4 @@
-package com.restaurant;
+package com.restaurant.Customer;
 
 import java.awt.EventQueue;
 

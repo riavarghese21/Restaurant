@@ -1,4 +1,4 @@
-package com.restaurant;
+package com.restaurant.Customer;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -8,15 +8,18 @@ import java.sql.PreparedStatement;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import com.restaurant.Database;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class CustomerChangePassword {
+public class CustomerChangeAddress {
 
 	public JFrame frame;
-	private JTextField newPasswordTF;
+	private JTextField newAddressTF;
 	private JTextField usernameTF;
 
 	/**
@@ -26,7 +29,7 @@ public class CustomerChangePassword {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CustomerChangePassword window = new CustomerChangePassword();
+					CustomerChangeAddress window = new CustomerChangeAddress();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +41,7 @@ public class CustomerChangePassword {
 	/**
 	 * Create the application.
 	 */
-	public CustomerChangePassword() {
+	public CustomerChangeAddress() {
 		initialize();
 	}
 
@@ -54,15 +57,15 @@ public class CustomerChangePassword {
 		setLookAndFeel();
 		confirmButton();
 		
-		newPasswordTF = new JTextField();
-		newPasswordTF.setBounds(67, 146, 310, 29);
-		frame.getContentPane().add(newPasswordTF);
-		newPasswordTF.setColumns(10);
+		newAddressTF = new JTextField();
+		newAddressTF.setBounds(67, 146, 310, 29);
+		frame.getContentPane().add(newAddressTF);
+		newAddressTF.setColumns(10);
 		
 		
-		JLabel newPasswordLBL = new JLabel("Enter New Password");
-		newPasswordLBL.setBounds(67, 121, 310, 14);
-		frame.getContentPane().add(newPasswordLBL);
+		JLabel newAddressLBL = new JLabel("Enter New Address");
+		newAddressLBL.setBounds(67, 121, 310, 14);
+		frame.getContentPane().add(newAddressLBL);
 		
 		JLabel usernameLBL = new JLabel("Enter Username");
 		usernameLBL.setBounds(67, 41, 310, 14);
@@ -80,28 +83,22 @@ public class CustomerChangePassword {
 		frame.getContentPane().add(confirmButton);
 		confirmButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setNewPassword();
+				setNewAddress();
 			}
 		});
 	}
-	public void setNewPassword() {
+	public void setNewAddress() {
 		try {
 			Connection connection = Database.connection;
-			String query = "UPDATE Customers SET customer_password = ? WHERE customer_username = ?";
+			String query = "UPDATE Customers SET customer_address = ? WHERE customer_username = ?";
 			PreparedStatement stm = connection.prepareStatement(query);
 			
-			stm.setString(1, newPasswordTF.getText());
+			stm.setString(1, newAddressTF.getText());
 			stm.setString(2,  usernameTF.getText());
 
 			stm.executeUpdate();
 			
-			String query2 = "SET PASSWORD FOR ?@'localhost' = ?";
-			PreparedStatement stm2 = connection.prepareStatement(query2);
-			stm2.setString(1, usernameTF.getText());
-			stm2.setString(2, newPasswordTF.getText());
-			stm2.executeUpdate();
-			
-			JOptionPane.showMessageDialog(null, "Password Updated Successfully!", "", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Address Updated Successfully!", "", JOptionPane.DEFAULT_OPTION);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

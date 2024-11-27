@@ -5,8 +5,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="Restaurant/src"/>
-	<classpathentry kind="lib" path="C:/Users/Jar/Documents/GitHub/mysql-connector-java-8.0.19.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Jar/Documents/GitHub/rs2xml.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/Users/riavarghese/Documents/JAR Files/mysql-connector-java-8.0.19.jar"/>
+	<classpathentry kind="lib" path="/Users/riavarghese/Documents/JAR Files/rs2xml.jar"/>
+	<classpathentry kind="lib" path="com.jgoodies.forms_1.9.0.v20240327-0800.jar"/>
+	<classpathentry kind="lib" path="com.jgoodies.common_1.8.1.v20240327-0800.jar"/>
 	<classpathentry kind="output" path="Restaurant/bin"/>
 </classpath>

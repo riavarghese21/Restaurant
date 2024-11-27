@@ -1,4 +1,4 @@
-package com.restaurant;
+package com.restaurant.Customer;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -23,7 +23,7 @@ public class Cart {
 
     private JFrame frame;
     private JTable table;
-    private DefaultTableModel model;
+    public DefaultTableModel model;
     private JButton RemoveFromCartButton;
     private JButton AddMoreItemsButton;
     private JButton GoToPaymentButton;
@@ -77,12 +77,12 @@ public class Cart {
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         JScrollPane CartScrollPane = new JScrollPane(table);
-        CartScrollPane.setBounds(55, 63, 400, 400);
+        CartScrollPane.setBounds(53, 89, 400, 400);
         frame.getContentPane().add(CartScrollPane);
 
         JLabel CartLabel = new JLabel("Cart");
         CartLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        CartLabel.setBounds(247, 41, 34, 16);
+        CartLabel.setBounds(244, 61, 34, 16);
         frame.getContentPane().add(CartLabel);
 
         // Remove From Cart Button
@@ -171,7 +171,7 @@ public class Cart {
 
         // Back Button
         BackButton = new JButton("Back");
-        BackButton.setBounds(198, 501, 117, 29);
+        BackButton.setBounds(268, 501, 117, 29);
         frame.getContentPane().add(BackButton);
 
         BackButton.addActionListener(new ActionListener() {
