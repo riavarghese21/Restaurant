@@ -152,7 +152,7 @@ public class CustomerReview {
             statement.setString(3, title);
             statement.setString(4, description);
 
-            String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
             statement.setString(5, formattedDate);
 
             statement.executeUpdate();
@@ -177,14 +177,14 @@ public class CustomerReview {
             PreparedStatement statement = connection.prepareStatement(query);
 
             ResultSet rs = statement.executeQuery();
-            SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+            SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             while (rs.next()) {
                 int rating = rs.getInt("review_rating");
                 String title = rs.getString("review_title");
                 String description = rs.getString("review_description");
                 String date = rs.getString("review_date");
 
-                Date parsedDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+                Date parsedDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
                 String formattedDate = displayDateFormat.format(parsedDate);
 
                 reviewsModel.addRow(new Object[]{rating + " stars", title, description, formattedDate});

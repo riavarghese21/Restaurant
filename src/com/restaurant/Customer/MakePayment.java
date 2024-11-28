@@ -2,7 +2,6 @@ package com.restaurant.Customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import com.restaurant.Database;
 import java.awt.*;
 import java.awt.event.*;
@@ -23,6 +22,7 @@ public class MakePayment {
     private JLabel TotalAmountLabel;
     private double orderTotalAmount = 0.00;
     private double appliedGiftCardValue = 0;
+    private boolean isPaymentMade = false;
     private JLabel ExpirationLabel;
 
     public static void main(String[] args) {
@@ -50,7 +50,7 @@ public class MakePayment {
         MakePaymentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
         MakePaymentLabel.setBounds(347, 6, 130, 29);
         frame.getContentPane().add(MakePaymentLabel);
-        
+
         orderTotalAmount = calculateTotalFromCart();
 
         // Back Button
@@ -177,29 +177,31 @@ public class MakePayment {
         StoreButton = new JButton("Save Card");
         StoreButton.setBounds(347, 466, 117, 29);
         frame.getContentPane().add(StoreButton);
-        
+
         ExpirationLabel = new JLabel("Expiration:");
         ExpirationLabel.setBounds(139, 245, 85, 16);
         frame.getContentPane().add(ExpirationLabel);
-        
-        StoreButton.addActionListener(e -> savePaymentInfo());
 
+        StoreButton.addActionListener(e -> savePaymentInfo());
 
         // Place Order Button
         PlaceOrderButton.addActionListener(e -> {
-            double finalAmount = orderTotalAmount - appliedGiftCardValue;
-            if (finalAmount <= 0) {
-                JOptionPane.showMessageDialog(frame, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                frame.dispose();
+            if (isPaymentMade) {
+                double finalAmount = orderTotalAmount - appliedGiftCardValue;
+                if (finalAmount <= 0) {
+                    JOptionPane.showMessageDialog(frame, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                } else {
+                    processOrder(finalAmount);
+                }
             } else {
-                processOrder(finalAmount);
+                JOptionPane.showMessageDialog(frame, "Please apply a gift card or save credit card information before placing the order.", "Payment Required", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
-    
+
     private void savePaymentInfo() {
         try {
-            // Database connection
             Connection connection = Database.getConnection();
             if (connection == null) {
                 JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
@@ -217,6 +219,7 @@ public class MakePayment {
             String zipCode = ZipCode.getText();
             String expirationMonth = (String) ExpirationMonthComboBox.getSelectedItem();
             String expirationYear = ExpirationYearComboBox.getSelectedItem() != null ? ExpirationYearComboBox.getSelectedItem().toString() : "";
+            int customerId = getCurrentCustomerId();
 
             if (cardType.equals("Card Type") || state.equals("State") || expirationMonth.equals("Month") || expirationYear.isEmpty()
                 || cardNumber.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || cvv.isEmpty() || billingAddress.isEmpty() || city.isEmpty() || zipCode.isEmpty()) {
@@ -224,23 +227,26 @@ public class MakePayment {
                 return;
             }
 
-            String insertPaymentInfoQuery = "INSERT INTO PaymentInfo (card_type, card_number, expiration_month, expiration_year, first_name, last_name, cvv, billing_address, city, state, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertPaymentInfoQuery = "INSERT INTO PaymentInfo (customer_id, card_type, card_number, expiration_month, expiration_year, first_name, last_name, cvv, billing_address, city, state, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement paymentStatement = connection.prepareStatement(insertPaymentInfoQuery);
-            paymentStatement.setString(1, cardType);
-            paymentStatement.setString(2, cardNumber);
-            paymentStatement.setInt(3, Integer.parseInt(expirationMonth));
-            paymentStatement.setInt(4, Integer.parseInt(expirationYear));
-            paymentStatement.setString(5, firstName);
-            paymentStatement.setString(6, lastName);
-            paymentStatement.setInt(7, Integer.parseInt(cvv));
-            paymentStatement.setString(8, billingAddress);
-            paymentStatement.setString(9, city);
-            paymentStatement.setString(10, state);
-            paymentStatement.setInt(11, Integer.parseInt(zipCode));
+            paymentStatement.setInt(1, customerId);
+            paymentStatement.setString(2, cardType);
+            paymentStatement.setString(3, cardNumber);
+            paymentStatement.setInt(4, Integer.parseInt(expirationMonth));
+            paymentStatement.setInt(5, Integer.parseInt(expirationYear));
+            paymentStatement.setString(6, firstName);
+            paymentStatement.setString(7, lastName);
+            paymentStatement.setInt(8, Integer.parseInt(cvv));
+            paymentStatement.setString(9, billingAddress);
+            paymentStatement.setString(10, city);
+            paymentStatement.setString(11, state);
+            paymentStatement.setInt(12, Integer.parseInt(zipCode));
 
             paymentStatement.executeUpdate();
 
             JOptionPane.showMessageDialog(frame, "Payment information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            isPaymentMade = true;
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(frame, "An error occurred while saving payment information. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -249,7 +255,6 @@ public class MakePayment {
             e.printStackTrace();
         }
     }
-
 
     private void applyGiftCard() {
         String giftCardCode = GiftCardCodeField.getText().trim();
@@ -260,9 +265,11 @@ public class MakePayment {
 
         try {
             Connection connection = Database.getConnection();
-            String query = "SELECT amount FROM GiftCards WHERE code = ? AND status = 'Active'";
+            int customerId = getCurrentCustomerId();
+            String query = "SELECT amount FROM GiftCards WHERE card_code = ? AND status = 'Active' AND customer_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, giftCardCode);
+            preparedStatement.setInt(2, customerId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
@@ -275,14 +282,35 @@ public class MakePayment {
 
                 TotalAmountLabel.setText("Total Amount Remaining: $" + String.format("%.2f", remainingAmount));
                 JOptionPane.showMessageDialog(frame, "Gift card applied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                isPaymentMade = true;
+
+                double newGiftCardBalance = appliedGiftCardValue - orderTotalAmount;
+
+                // Update the gift card status if the balance is fully used
+                if (newGiftCardBalance <= 0) {
+                    String updateStatusQuery = "UPDATE GiftCards SET amount = 0, status = 'Redeemed' WHERE card_code = ?";
+                    PreparedStatement updateStatement = connection.prepareStatement(updateStatusQuery);
+                    updateStatement.setString(1, giftCardCode);
+                    updateStatement.executeUpdate();
+                } else {
+                    // Update the remaining amount on the gift card
+                    String updateAmountQuery = "UPDATE GiftCards SET amount = ? WHERE card_code = ?";
+                    PreparedStatement updateAmountStatement = connection.prepareStatement(updateAmountQuery);
+                    updateAmountStatement.setDouble(1, newGiftCardBalance);
+                    updateAmountStatement.setString(2, giftCardCode);
+                    updateAmountStatement.executeUpdate();
+                }
             } else {
-                JOptionPane.showMessageDialog(frame, "Invalid or inactive gift card code.", "Invalid Gift Card", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Invalid or inactive gift card code, or this gift card does not belong to you.", "Invalid Gift Card", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(frame, "An error occurred while applying the gift card. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
+
+
+
 
     private double calculateTotalFromCart() {
         double totalCost = 0.0;
@@ -323,7 +351,7 @@ public class MakePayment {
             String insertOrderQuery = "INSERT INTO Orders (customer_id, order_date, total_amount, order_status) VALUES (?, ?, ?, ?)";
             PreparedStatement orderStatement = connection.prepareStatement(insertOrderQuery, PreparedStatement.RETURN_GENERATED_KEYS);
             
-            String orderDate = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(new Date());
+            String orderDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
             orderStatement.setInt(1, customerId);
             orderStatement.setString(2, orderDate);
             orderStatement.setDouble(3, finalAmount);
@@ -356,6 +384,8 @@ public class MakePayment {
 
                     JOptionPane.showMessageDialog(frame, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
+                    CustomerSignedIn customerSignedInPage = new CustomerSignedIn();
+                    customerSignedInPage.setVisible(true);
                 }
             } else {
                 JOptionPane.showMessageDialog(frame, "Failed to place order. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);

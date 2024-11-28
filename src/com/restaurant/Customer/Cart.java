@@ -201,7 +201,7 @@ public class Cart {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
                         int quantity = (int) model.getValueAt(selectedRow, 2);
-                        ModifyQuantitySpinner.setValue(quantity);  // Update spinner value
+                        ModifyQuantitySpinner.setValue(quantity); 
                     }
                 }
             }
