@@ -90,12 +90,6 @@ public class SignInPage {
 			}
 		});
 	}
-	public void goToButtonLabelTextFieldDemoPage() {
-		frame.dispose();
-		ButtonLabelTextFieldDemo BLTFDP = new ButtonLabelTextFieldDemo(); 
-		BLTFDP.initialize();
-		BLTFDP.frame.setVisible(true);
-	}
 	public void goToCustomerSignIn() {
 		frame.dispose();
 		CustomerSignIn CSI = new CustomerSignIn(); 

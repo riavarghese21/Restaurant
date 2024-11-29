@@ -117,7 +117,7 @@ public class CustomerPaymentInfo {
 			stm.setString(2, encryptedSecurityCode);
 			stm.setString(3, encryptedExpiration);
 			stm.setString(4,  usernameTF.getText());
-
+			
 			stm.executeUpdate();
 
 			JOptionPane.showMessageDialog(null, "Payment Information Added!", "", JOptionPane.DEFAULT_OPTION);

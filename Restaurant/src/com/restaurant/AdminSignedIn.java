@@ -56,9 +56,15 @@ public class AdminSignedIn {
 		frame.getContentPane().add(manageEmployeesButton);
 		manageEmployeesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//goToCustomerSignIn();
+				goToManageEmployees();
 			}
 		});
+	}
+	public void goToManageEmployees() {
+		frame.dispose();
+		AdminManageEmployees AME = new AdminManageEmployees(); 
+		AME.initialize();
+		AME.frame.setVisible(true);
 	}
 	public void manageCustomersButton() {
 		JButton manageCustomersButton = new JButton("Manage Customers");
@@ -66,9 +72,15 @@ public class AdminSignedIn {
 		frame.getContentPane().add(manageCustomersButton);
 		manageCustomersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//goToCustomerSignIn();
+				goToManageCustomers();
 			}
 		});
+	}
+	public void goToManageCustomers() {
+		frame.dispose();
+		AdminManageCustomers AMC = new AdminManageCustomers(); 
+		AMC.initialize();
+		AMC.frame.setVisible(true);
 	}
 	public void manageMenuButton() {
 		JButton manageMenuButton = new JButton("Manage Menu");
@@ -76,9 +88,15 @@ public class AdminSignedIn {
 		frame.getContentPane().add(manageMenuButton);
 		manageMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//goToCustomerSignIn();
+				goToManageMenu();
 			}
 		});
+	}
+	public void goToManageMenu() {
+		frame.dispose();
+		AdminManageMenu AMM= new AdminManageMenu(); 
+		AMM.initialize();
+		AMM.frame.setVisible(true);
 	}
 	public void manageOrdersButton() {
 		JButton manageOrdersButton = new JButton("Manage Reservations/Orders");
@@ -86,9 +104,15 @@ public class AdminSignedIn {
 		frame.getContentPane().add(manageOrdersButton);
 		manageOrdersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//goToCustomerSignIn();
+				goToManageOrders();
 			}
 		});
+	}
+	public void goToManageOrders() {
+		frame.dispose();
+		AdminManageOrders AMO = new AdminManageOrders(); 
+		AMO.initialize();
+		AMO.frame.setVisible(true);
 	}
 	//Makes the UI look modern if the user is on Windows
 	public void setLookAndFeel() {
