@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultComboBoxModel;
 import com.restaurant.Database;
+import com.restaurant.Customer.CustomerSignIn;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -15,7 +16,7 @@ import java.sql.*;
 import java.awt.event.ActionEvent;
 
 
-public class AdminEditEmployee {
+public class AdminDeleteEmployee {
 
 	public JFrame frame;
 	private static JComboBox<String> employeeCB;
@@ -28,7 +29,7 @@ public class AdminEditEmployee {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminEditEmployee window = new AdminEditEmployee();
+					AdminDeleteEmployee window = new AdminDeleteEmployee();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +41,7 @@ public class AdminEditEmployee {
 	/**
 	 * Create the application.
 	 */
-	public AdminEditEmployee() {
+	public AdminDeleteEmployee() {
 		initialize();
 	}
 
@@ -48,21 +49,21 @@ public class AdminEditEmployee {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Edit Employee");
+		frame = new JFrame("Delete Employee");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel selectEmployeeLBL = new JLabel("Select Employee");
-		selectEmployeeLBL.setBounds(82, 44, 134, 14);
+		selectEmployeeLBL.setBounds(105, 24, 134, 14);
 		frame.getContentPane().add(selectEmployeeLBL);
 		
 		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(82, 83, 192, 22);
+		employeeCB.setBounds(105, 82, 192, 22);
 		frame.getContentPane().add(employeeCB);
 		
 		JButton deleteButton = new JButton("Delete Account");
-		deleteButton.setBounds(10, 203, 180, 23);
+		deleteButton.setBounds(117, 202, 180, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -70,6 +71,7 @@ public class AdminEditEmployee {
 				deleteEmployee();
 			}
 		});
+
 		populateComboBox();
 	}
 	public void populateComboBox() {
@@ -105,5 +107,11 @@ public class AdminEditEmployee {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	public void goToModifyEmployee() {
+		frame.dispose();
+		AdminEditEmployeeUsername CSI = new AdminEditEmployeeUsername(); 
+		CSI.initialize();
+		CSI.frame.setVisible(true);
 	}
 }

@@ -42,44 +42,91 @@ public class AdminManageEmployees {
 		frame = new JFrame("Manage Employees");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLookAndFeel();
-		
-		createNewEmployeeButton();
-		editEmployeeButton();
-	}
-	
-	public void createNewEmployeeButton() {
 		frame.getContentPane().setLayout(null);
+		
 		JButton manageEmployeesButton = new JButton("Create Employee");
-		manageEmployeesButton.setBounds(72, 70, 310, 29);
+		manageEmployeesButton.setBounds(72, 22, 310, 29);
 		frame.getContentPane().add(manageEmployeesButton);
+		
 		manageEmployeesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				goToCreateNewEmployee();
 			}
 		});
+		
+		JButton deleteEmployeesButton = new JButton("Delete Employee");
+		deleteEmployeesButton.setBounds(72, 62, 310, 29);
+		frame.getContentPane().add(deleteEmployeesButton);
+		
+		deleteEmployeesButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToDeleteEmployee();
+			}
+		});
+		
+		JButton editUsernameButton = new JButton("Edit Username");
+		editUsernameButton.setBounds(72, 102, 310, 29);
+		frame.getContentPane().add(editUsernameButton);
+		
+		editUsernameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToEditUsername();
+			}
+		});
+		
+		JButton editPasswordButton = new JButton("Edit Password");
+		editPasswordButton.setBounds(72, 142, 310, 29);
+		frame.getContentPane().add(editPasswordButton);
+		
+		editPasswordButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToEditPassword();
+			}
+		});
+		
+		JButton editFullNameButton = new JButton("Edit Name");
+		editFullNameButton.setBounds(72, 182, 310, 29);
+		frame.getContentPane().add(editFullNameButton);
+		editFullNameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToEditFullName();
+			}
+		});
 	}
+
 	public void goToCreateNewEmployee() {
 		frame.dispose();
 		AdminCreateNewEmployee CNE = new AdminCreateNewEmployee(); 
 		CNE.initialize();
 		CNE.frame.setVisible(true);
 	}
-	public void editEmployeeButton() {
-		JButton manageEmployeesButton = new JButton("Edit Employee");
-		manageEmployeesButton.setBounds(72, 169, 310, 29);
-		frame.getContentPane().add(manageEmployeesButton);
-		manageEmployeesButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				goToEditEmployee();
-			}
-		});
-	}
-	public void goToEditEmployee() {
+
+	public void goToDeleteEmployee() {
 		frame.dispose();
-		AdminEditEmployee AEE = new AdminEditEmployee(); 
-		AEE.initialize();
-		AEE.frame.setVisible(true);
+		AdminDeleteEmployee ADE = new AdminDeleteEmployee(); 
+		ADE.initialize();
+		ADE.frame.setVisible(true);
+	}
+	
+	public void goToEditUsername() {
+		frame.dispose();
+		AdminEditEmployeeUsername AEEU = new AdminEditEmployeeUsername(); 
+		AEEU.initialize();
+		AEEU.frame.setVisible(true);
+	}
+	
+	public void goToEditPassword() {
+		frame.dispose();
+		AdminEditEmployeePassword AEEP = new AdminEditEmployeePassword(); 
+		AEEP.initialize();
+		AEEP.frame.setVisible(true);
+	}
+	
+	public void goToEditFullName() {
+		frame.dispose();
+		AdminEditEmployeeFullName AEEFN = new AdminEditEmployeeFullName(); 
+		AEEFN.initialize();
+		AEEFN.frame.setVisible(true);
 	}
 	
 	public void setLookAndFeel() {

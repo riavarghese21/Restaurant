@@ -49,7 +49,7 @@ public class CustomerChangeAddress {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Change Password");
+		frame = new JFrame("Change Address");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
