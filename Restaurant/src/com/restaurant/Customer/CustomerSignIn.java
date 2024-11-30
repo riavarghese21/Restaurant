@@ -108,11 +108,11 @@ public class CustomerSignIn {
     }
     
 
-      private void goToCreateAccountPage() {
-                frame.dispose();
-                CreateCustomerAccount createCustomerAccount = new CreateCustomerAccount();
-                createCustomerAccount.setVisible(true);
-            }
+    private void goToCreateAccountPage() {
+    	frame.dispose();
+    	CreateCustomerAccount createCustomerAccount = new CreateCustomerAccount();
+    	createCustomerAccount.setVisible(true);
+    }
       
    
     

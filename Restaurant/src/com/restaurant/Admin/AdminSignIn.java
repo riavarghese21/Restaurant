@@ -1,25 +1,27 @@
 package com.restaurant.Admin;
 
+import java.awt.*;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
+import javax.swing.*;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import com.restaurant.Database;
 
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-
 public class AdminSignIn {
 
 	public JFrame frame;
 	private static JTextField usernameTF;
-	private static JTextField pswdTF;
+	private static JPasswordField pswdTF;
 
 	/**
 	 * Launch the application.
@@ -61,7 +63,7 @@ public class AdminSignIn {
 		frame.getContentPane().add(usernameTF);
 		usernameTF.setColumns(10);
 		
-		pswdTF = new JTextField();
+		pswdTF = new JPasswordField();
 		pswdTF.setBounds(72, 94, 310, 29);
 		frame.getContentPane().add(pswdTF);
 		pswdTF.setColumns(10);
@@ -73,6 +75,7 @@ public class AdminSignIn {
 		JLabel pswdLBL = new JLabel("Password");
 		pswdLBL.setBounds(72, 76, 310, 14);
 		frame.getContentPane().add(pswdLBL);
+
 	}
 	public void signInButton() {
 		JButton signInBTN = new JButton("Sign-in");
@@ -97,7 +100,7 @@ public class AdminSignIn {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String databaseName = "restaurantdb";
-            String username = usernameTF.getText(); String password = pswdTF.getText();
+            String username = usernameTF.getText(); String password = new String(pswdTF.getPassword());
             Database.connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?serverTimesone=EST", username, password);
             System.out.println("Database connected successfully.");
         } catch (SQLException e) {

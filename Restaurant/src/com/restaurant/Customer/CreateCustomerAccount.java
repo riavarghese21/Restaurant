@@ -145,7 +145,7 @@ public class CreateCustomerAccount {
 			stm3.executeUpdate();
 			
 			
-			JOptionPane.showMessageDialog(null, "Account Created Successfully!", "Signed In!", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Account Created Successfully!", "", JOptionPane.DEFAULT_OPTION);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
