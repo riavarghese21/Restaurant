@@ -3,6 +3,11 @@ package com.restaurant;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import com.restaurant.Admin.AdminSignIn;
+import com.restaurant.Customer.CustomerSignIn;
+import com.restaurant.Employee.EmployeeSignIn;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.*;
