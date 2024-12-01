@@ -1,6 +1,8 @@
 package com.restaurant.Admin;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,16 +17,14 @@ import com.restaurant.Database;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 
 public class AdminEditEmployeeUsername {
 
 	public JFrame frame;
+	private static JComboBox<String> employeeCB;
 	static DefaultComboBoxModel<String> employeeCBModel = new DefaultComboBoxModel<String>();
-	private JLabel passwordLBL;
-	private JTextField textField;
-	private JPasswordField passwordField;
-	private JTextField nameTF;
+	private JLabel newUserLBL;
+	private JTextField newUser;
 
 	/**
 	 * Launch the application.
@@ -58,36 +58,69 @@ public class AdminEditEmployeeUsername {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("Modify Info");
-		btnNewButton.setBounds(165, 204, 89, 23);
-		frame.getContentPane().add(btnNewButton);
+		JButton modifyButton = new JButton("Modify Info");
+		modifyButton.setBounds(165, 204, 89, 23);
+		frame.getContentPane().add(modifyButton);
 		
-		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(72, 11, 145, 14);
+		modifyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editEmployeeUsername();
+			}
+		});
+		
+		JLabel usernameLBL = new JLabel("Old Username");
+		usernameLBL.setBounds(165, 24, 88, 14);
 		frame.getContentPane().add(usernameLBL);
 		
-		passwordLBL = new JLabel("Password");
-		passwordLBL.setBounds(72, 73, 86, 14);
-		frame.getContentPane().add(passwordLBL);
+		newUserLBL = new JLabel("New Username");
+		newUserLBL.setBounds(165, 86, 88, 14);
+		frame.getContentPane().add(newUserLBL);
 		
-		textField = new JTextField();
-		textField.setBounds(72, 36, 86, 20);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		employeeCB = new JComboBox<String>();
+		employeeCB.setBounds(165, 49, 88, 22);
+		frame.getContentPane().add(employeeCB);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(72, 98, 89, 20);
-		frame.getContentPane().add(passwordField);
+		newUser = new JTextField();
+		newUser.setBounds(165, 111, 89, 20);
+		frame.getContentPane().add(newUser);
+		newUser.setColumns(10);
 		
-		JLabel nameLBL = new JLabel("Full Name");
-		nameLBL.setBounds(72, 129, 46, 14);
-		frame.getContentPane().add(nameLBL);
-		
-		nameTF = new JTextField();
-		nameTF.setBounds(72, 154, 86, 20);
-		frame.getContentPane().add(nameTF);
-		nameTF.setColumns(10);		
+		populateComboBox();
+	}
+	public void populateComboBox() {
+		try {
+			Connection connection = Database.connection; // Connect to database
+			Statement stm = connection.createStatement(); // Create statement
+			String query = "SELECT * FROM Employees"; // Enter the query
+			
+			employeeCBModel = new DefaultComboBoxModel<String>();
+			
+			ResultSet result = stm.executeQuery(query); // Execute the query
+			while (result.next()) {
+				String employeeName = result.getString("employee_username");
+				employeeCBModel.addElement(employeeName);
+			}
+			
+			employeeCB.setModel(employeeCBModel);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 	
-
+	public void editEmployeeUsername() {
+		try {
+			Connection connection = Database.connection;
+			String query = "UPDATE Employees SET employee_username = ? WHERE employee_username = ?";
+			PreparedStatement stm = connection.prepareStatement(query);
+			String oldUser = employeeCB.getSelectedItem().toString();
+			stm.setString(1, newUser.getText());
+			stm.setString(2, oldUser);
+			stm.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Username Changed Successfully!", "", JOptionPane.DEFAULT_OPTION);
+			populateComboBox();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }

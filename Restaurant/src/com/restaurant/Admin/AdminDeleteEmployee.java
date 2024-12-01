@@ -99,7 +99,7 @@ public class AdminDeleteEmployee {
 			String query = "DELETE FROM Employees WHERE employee_username = ?";
 			PreparedStatement stm = connection.prepareStatement(query);
 			String value = employeeCB.getSelectedItem().toString();
-			stm.setString(1, value); // doctor_id (only question mark)
+			stm.setString(1, value);
 			stm.executeUpdate();
 			
 			JOptionPane.showMessageDialog(null, "Account Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
