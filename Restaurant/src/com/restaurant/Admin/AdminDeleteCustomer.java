@@ -16,11 +16,11 @@ import java.sql.*;
 import java.awt.event.ActionEvent;
 
 
-public class AdminDeleteEmployee {
+public class AdminDeleteCustomer {
 
 	public JFrame frame;
-	private static JComboBox<String> employeeCB;
-	static DefaultComboBoxModel<String> employeeCBModel = new DefaultComboBoxModel<String>();
+	private static JComboBox<String> customerCB;
+	static DefaultComboBoxModel<String> customerCBModel = new DefaultComboBoxModel<String>();
 
 	/**
 	 * Launch the application.
@@ -29,7 +29,7 @@ public class AdminDeleteEmployee {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminDeleteEmployee window = new AdminDeleteEmployee();
+					AdminDeleteCustomer window = new AdminDeleteCustomer();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +41,7 @@ public class AdminDeleteEmployee {
 	/**
 	 * Create the application.
 	 */
-	public AdminDeleteEmployee() {
+	public AdminDeleteCustomer() {
 		initialize();
 	}
 
@@ -49,18 +49,18 @@ public class AdminDeleteEmployee {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Delete Employee");
+		frame = new JFrame("Delete Customer");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel selectEmployeeLBL = new JLabel("Select Employee");
-		selectEmployeeLBL.setBounds(105, 24, 134, 14);
-		frame.getContentPane().add(selectEmployeeLBL);
+		JLabel selectCustomerLBL = new JLabel("Select Customer");
+		selectCustomerLBL.setBounds(105, 24, 134, 14);
+		frame.getContentPane().add(selectCustomerLBL);
 		
-		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(105, 82, 192, 22);
-		frame.getContentPane().add(employeeCB);
+		customerCB = new JComboBox<String>();
+		customerCB.setBounds(105, 82, 192, 22);
+		frame.getContentPane().add(customerCB);
 		
 		JButton deleteButton = new JButton("Delete Account");
 		deleteButton.setBounds(117, 202, 180, 23);
@@ -68,7 +68,7 @@ public class AdminDeleteEmployee {
 		
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				deleteEmployee();
+				deleteCustomer();
 			}
 		});
 
@@ -78,27 +78,27 @@ public class AdminDeleteEmployee {
 		try {
 			Connection connection = Database.connection; // Connect to database
 			Statement stm = connection.createStatement(); // Create statement
-			String query = "SELECT * FROM Employees"; // Enter the query
+			String query = "SELECT * FROM Customers"; // Enter the query
 			
-			employeeCBModel = new DefaultComboBoxModel<String>();
+			customerCBModel = new DefaultComboBoxModel<String>();
 			
 			ResultSet result = stm.executeQuery(query); // Execute the query
 			while (result.next()) {
-				String employeeName = result.getString("employee_username");
-				employeeCBModel.addElement(employeeName);
+				String employeeName = result.getString("customer_username");
+				customerCBModel.addElement(employeeName);
 			}
 			
-			employeeCB.setModel(employeeCBModel);
+			customerCB.setModel(customerCBModel);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-	public void deleteEmployee() {
+	public void deleteCustomer() {
 		try {
 			Connection connection = Database.connection;
-			String query = "DELETE FROM Employees WHERE employee_username = ?";
+			String query = "DELETE FROM Customers WHERE customer_username = ?";
 			PreparedStatement stm = connection.prepareStatement(query);
-			String value = employeeCB.getSelectedItem().toString();
+			String value = customerCB.getSelectedItem().toString();
 			stm.setString(1, value);
 			stm.executeUpdate();
 			

@@ -21,11 +21,11 @@ import com.restaurant.Encryption;
 
 import javax.swing.JPasswordField;
 
-public class AdminEditEmployeePassword {
+public class AdminEditCustomerPassword {
 
 	public JFrame frame;
-	private static JComboBox<String> employeeCB;
-	static DefaultComboBoxModel<String> employeeCBModel = new DefaultComboBoxModel<String>();
+	private static JComboBox<String> customerCB;
+	static DefaultComboBoxModel<String> customerCBModel = new DefaultComboBoxModel<String>();
 	private JLabel newPasswordLBL;
 	private static JPasswordField newPassword;
 
@@ -36,7 +36,7 @@ public class AdminEditEmployeePassword {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminEditEmployeePassword window = new AdminEditEmployeePassword();
+					AdminEditCustomerPassword window = new AdminEditCustomerPassword();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +48,7 @@ public class AdminEditEmployeePassword {
 	/**
 	 * Create the application.
 	 */
-	public AdminEditEmployeePassword() {
+	public AdminEditCustomerPassword() {
 		initialize();
 	}
 
@@ -67,7 +67,7 @@ public class AdminEditEmployeePassword {
 		
 		modifyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				editEmployeePassword();
+				editCustomerPassword();
 			}
 		});
 		
@@ -79,9 +79,9 @@ public class AdminEditEmployeePassword {
 		newPasswordLBL.setBounds(165, 86, 88, 14);
 		frame.getContentPane().add(newPasswordLBL);
 		
-		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(165, 49, 88, 22);
-		frame.getContentPane().add(employeeCB);
+		customerCB = new JComboBox<String>();
+		customerCB.setBounds(165, 49, 88, 22);
+		frame.getContentPane().add(customerCB);
 		
 		newPassword = new JPasswordField();
 		newPassword.setBounds(165, 111, 89, 20);
@@ -94,29 +94,29 @@ public class AdminEditEmployeePassword {
 		try {
 			Connection connection = Database.connection; // Connect to database
 			Statement stm = connection.createStatement(); // Create statement
-			String query = "SELECT * FROM Employees"; // Enter the query
+			String query = "SELECT * FROM Customers"; // Enter the query
 			
-			employeeCBModel = new DefaultComboBoxModel<String>();
+			customerCBModel = new DefaultComboBoxModel<String>();
 			
 			ResultSet result = stm.executeQuery(query); // Execute the query
 			while (result.next()) {
-				String employeeName = result.getString("employee_username");
-				employeeCBModel.addElement(employeeName);
+				String customerName = result.getString("customer_username");
+				customerCBModel.addElement(customerName);
 			}
 			
-			employeeCB.setModel(employeeCBModel);
+			customerCB.setModel(customerCBModel);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-	public void editEmployeePassword() {
+	public void editCustomerPassword() {
 		try {
 			Connection connection = Database.connection;
-			String query = "UPDATE Employees SET employee_password = ? WHERE employee_username = ?";
+			String query = "UPDATE Customers SET customer_password = ? WHERE customer_username = ?";
 			String password = new String(newPassword.getPassword());
 			String encryptedPswd = Encryption.encrypt(password);
 			PreparedStatement stm = connection.prepareStatement(query);
-			String user = employeeCB.getSelectedItem().toString();
+			String user = customerCB.getSelectedItem().toString();
 			stm.setString(1, encryptedPswd);
 			stm.setString(2, user);
 			stm.executeUpdate();
