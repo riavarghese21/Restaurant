@@ -47,12 +47,14 @@ public class AdminSignedIn {
 		manageEmployeesButton();
 		manageCustomersButton();
 		manageMenuButton();
+		manageReservationsButton();
 		manageOrdersButton();
+		deleteReviewsButton();
 	}
 	
 	public void manageEmployeesButton() {
 		JButton manageEmployeesButton = new JButton("Manage Employees");
-		manageEmployeesButton.setBounds(72, 28, 310, 29);
+		manageEmployeesButton.setBounds(72, 11, 310, 29);
 		frame.getContentPane().add(manageEmployeesButton);
 		manageEmployeesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -68,7 +70,7 @@ public class AdminSignedIn {
 	}
 	public void manageCustomersButton() {
 		JButton manageCustomersButton = new JButton("Manage Customers");
-		manageCustomersButton.setBounds(72, 81, 310, 29);
+		manageCustomersButton.setBounds(72, 51, 310, 29);
 		frame.getContentPane().add(manageCustomersButton);
 		manageCustomersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -84,7 +86,7 @@ public class AdminSignedIn {
 	}
 	public void manageMenuButton() {
 		JButton manageMenuButton = new JButton("Manage Menu");
-		manageMenuButton.setBounds(72, 136, 310, 29);
+		manageMenuButton.setBounds(72, 91, 310, 29);
 		frame.getContentPane().add(manageMenuButton);
 		manageMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,9 +100,25 @@ public class AdminSignedIn {
 		AMM.initialize();
 		AMM.frame.setVisible(true);
 	}
+	public void manageReservationsButton() {
+		JButton manageReservationsButton = new JButton("Manage Reservations");
+		manageReservationsButton.setBounds(72, 131, 310, 29);
+		frame.getContentPane().add(manageReservationsButton);
+		manageReservationsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToManageReservations();
+			}
+		});
+	}
+	public void goToManageReservations() {
+		frame.dispose();
+		AdminDeleteReservations AMO = new AdminDeleteReservations(); 
+		AMO.initialize();
+		AMO.frame.setVisible(true);
+	}
 	public void manageOrdersButton() {
-		JButton manageOrdersButton = new JButton("Manage Reservations/Orders");
-		manageOrdersButton.setBounds(72, 193, 310, 29);
+		JButton manageOrdersButton = new JButton("Manage Orders");
+		manageOrdersButton.setBounds(72, 181, 310, 29);
 		frame.getContentPane().add(manageOrdersButton);
 		manageOrdersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -110,9 +128,25 @@ public class AdminSignedIn {
 	}
 	public void goToManageOrders() {
 		frame.dispose();
-		AdminManageOrders AMO = new AdminManageOrders(); 
+		AdminDeleteOrders AMO = new AdminDeleteOrders(); 
 		AMO.initialize();
 		AMO.frame.setVisible(true);
+	}
+	public void deleteReviewsButton() {
+		JButton manageReviewsButton = new JButton("Delete Reviews");
+		manageReviewsButton.setBounds(72, 221, 310, 29);
+		frame.getContentPane().add(manageReviewsButton);
+		manageReviewsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToDeleteReviews();
+			}
+		});
+	}
+	public void goToDeleteReviews() {
+		frame.dispose();
+		AdminDeleteReviews ADR = new AdminDeleteReviews(); 
+		ADR.initialize();
+		ADR.frame.setVisible(true);
 	}
 	//Makes the UI look modern if the user is on Windows
 	public void setLookAndFeel() {
