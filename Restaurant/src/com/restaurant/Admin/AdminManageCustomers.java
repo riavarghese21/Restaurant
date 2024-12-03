@@ -44,11 +44,11 @@ public class AdminManageCustomers {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JButton deleteEmployeesButton = new JButton("Delete Customer");
-		deleteEmployeesButton.setBounds(72, 62, 310, 29);
-		frame.getContentPane().add(deleteEmployeesButton);
+		JButton deleteCustomerButton = new JButton("Delete Customer");
+		deleteCustomerButton.setBounds(72, 62, 310, 29);
+		frame.getContentPane().add(deleteCustomerButton);
 		
-		deleteEmployeesButton.addActionListener(new ActionListener() {
+		deleteCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				goToDeleteCustomer();
 			}

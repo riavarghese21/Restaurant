@@ -1,26 +1,27 @@
 package com.restaurant.Admin;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-import javax.swing.JFrame;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.DefaultComboBoxModel;
+
 import com.restaurant.Database;
-import com.restaurant.Customer.CustomerSignIn;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.sql.*;
-import java.awt.event.ActionEvent;
-
-
-public class AdminDeleteCustomer {
+public class AdminDeleteItem {
 
 	public JFrame frame;
-	private static JComboBox<String> customerCB;
-	static DefaultComboBoxModel<String> customerCBModel = new DefaultComboBoxModel<String>();
+	private static JComboBox<String> itemCB;
+	static DefaultComboBoxModel<String> itemCBModel = new DefaultComboBoxModel<String>();
 
 	/**
 	 * Launch the application.
@@ -29,7 +30,7 @@ public class AdminDeleteCustomer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminDeleteCustomer window = new AdminDeleteCustomer();
+					AdminDeleteItem window = new AdminDeleteItem();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +42,7 @@ public class AdminDeleteCustomer {
 	/**
 	 * Create the application.
 	 */
-	public AdminDeleteCustomer() {
+	public AdminDeleteItem() {
 		initialize();
 	}
 
@@ -49,26 +50,26 @@ public class AdminDeleteCustomer {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Delete Customer");
+		frame = new JFrame("Delete Item");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel selectCustomerLBL = new JLabel("Select Customer");
-		selectCustomerLBL.setBounds(105, 24, 134, 14);
-		frame.getContentPane().add(selectCustomerLBL);
+		JLabel selectItemLBL = new JLabel("Select Item");
+		selectItemLBL.setBounds(105, 24, 134, 14);
+		frame.getContentPane().add(selectItemLBL);
 		
-		customerCB = new JComboBox<String>();
-		customerCB.setBounds(105, 82, 192, 22);
-		frame.getContentPane().add(customerCB);
+		itemCB = new JComboBox<String>();
+		itemCB.setBounds(105, 82, 192, 22);
+		frame.getContentPane().add(itemCB);
 		
-		JButton deleteButton = new JButton("Delete Account");
+		JButton deleteButton = new JButton("Delete Item");
 		deleteButton.setBounds(117, 202, 180, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				deleteCustomer();
+				deleteItem();
 			}
 		});
 
@@ -78,34 +79,35 @@ public class AdminDeleteCustomer {
 		try {
 			Connection connection = Database.connection; // Connect to database
 			Statement stm = connection.createStatement(); // Create statement
-			String query = "SELECT * FROM Customers"; // Enter the query
+			String query = "SELECT * FROM Menu"; // Enter the query
 			
-			customerCBModel = new DefaultComboBoxModel<String>();
+			itemCBModel = new DefaultComboBoxModel<String>();
 			
 			ResultSet result = stm.executeQuery(query); // Execute the query
 			while (result.next()) {
-				String customerName = result.getString("customer_username");
-				customerCBModel.addElement(customerName);
+				String itemName = result.getString("item_name");
+				itemCBModel.addElement(itemName);
 			}
 			
-			customerCB.setModel(customerCBModel);
+			itemCB.setModel(itemCBModel);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-	public void deleteCustomer() {
+	public void deleteItem() {
 		try {
 			Connection connection = Database.connection;
-			String query = "DELETE FROM Customers WHERE customer_username = ?";
+			String query = "DELETE FROM Menu WHERE item_name = ?";
 			PreparedStatement stm = connection.prepareStatement(query);
-			String value = customerCB.getSelectedItem().toString();
+			String value = itemCB.getSelectedItem().toString();
 			stm.setString(1, value);
 			stm.executeUpdate();
 			
-			JOptionPane.showMessageDialog(null, "Account Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Item Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
 			populateComboBox();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
+
 }

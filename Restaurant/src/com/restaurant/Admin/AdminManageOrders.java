@@ -1,7 +1,10 @@
 package com.restaurant.Admin;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class AdminManageOrders {
@@ -38,6 +41,58 @@ public class AdminManageOrders {
 		frame = new JFrame("Manage Orders");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JButton addItemButton = new JButton("Add Item");
+		addItemButton.setBounds(72, 62, 310, 29);
+		frame.getContentPane().add(addItemButton);
+		
+		addItemButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToAddItem();
+			}
+		});
+
+		
+		JButton editItemButton = new JButton("Edit Item");
+		editItemButton.setBounds(72, 102, 310, 29);
+		frame.getContentPane().add(editItemButton);
+		
+		editItemButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToEditItem();
+			}
+		});
+		
+		JButton deleteItemButton = new JButton("Delete Item");
+		deleteItemButton.setBounds(72, 142, 310, 29);
+		frame.getContentPane().add(deleteItemButton);
+		
+		deleteItemButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToDeleteItem();
+			}
+		});
+	}
+	public void goToAddItem() {
+		frame.dispose();
+		AdminAddItem AAI = new AdminAddItem(); 
+		AAI.initialize();
+		AAI.frame.setVisible(true);
+	}
+	
+	public void goToEditItem() {
+		frame.dispose();
+		AdminEditItemPrice AEI = new AdminEditItemPrice(); 
+		AEI.initialize();
+		AEI.frame.setVisible(true);
+	}
+	
+	public void goToDeleteItem() {
+		frame.dispose();
+		AdminDeleteItem ADI = new AdminDeleteItem(); 
+		ADI.initialize();
+		ADI.frame.setVisible(true);
 	}
 
 }
