@@ -101,7 +101,7 @@ public class AdminSignedIn {
 		AMM.frame.setVisible(true);
 	}
 	public void manageReservationsButton() {
-		JButton manageReservationsButton = new JButton("Manage Reservations");
+		JButton manageReservationsButton = new JButton("Delete Reservations");
 		manageReservationsButton.setBounds(72, 131, 310, 29);
 		frame.getContentPane().add(manageReservationsButton);
 		manageReservationsButton.addActionListener(new ActionListener() {
@@ -117,7 +117,7 @@ public class AdminSignedIn {
 		AMO.frame.setVisible(true);
 	}
 	public void manageOrdersButton() {
-		JButton manageOrdersButton = new JButton("Manage Orders");
+		JButton manageOrdersButton = new JButton("Delete Orders");
 		manageOrdersButton.setBounds(72, 181, 310, 29);
 		frame.getContentPane().add(manageOrdersButton);
 		manageOrdersButton.addActionListener(new ActionListener() {
