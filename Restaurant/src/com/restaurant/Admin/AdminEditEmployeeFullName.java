@@ -86,7 +86,20 @@ public class AdminEditEmployeeFullName {
 		newName.setColumns(10);
 		
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	goToAdminManageEmployeesPage();
+            }
+        });
 	}
+    private void goToAdminManageEmployeesPage() {
+        frame.dispose();
+        AdminManageEmployees AdminManageEmployees = new AdminManageEmployees();
+        AdminManageEmployees.setVisible(true);
+    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database

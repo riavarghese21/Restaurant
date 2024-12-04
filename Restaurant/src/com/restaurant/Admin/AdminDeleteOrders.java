@@ -69,7 +69,7 @@ public class AdminDeleteOrders {
 		frame.getContentPane().add(orderCB);
 		
 		JButton deleteButton = new JButton("Delete Order");
-		deleteButton.setBounds(117, 202, 180, 23);
+		deleteButton.setBounds(105, 183, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -79,7 +79,20 @@ public class AdminDeleteOrders {
 		});
 
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToAdminSignedInPage();
+            }
+        });
 	}
+    private void goToAdminSignedInPage() {
+        frame.dispose();
+        AdminSignedIn AdminSignedIn = new AdminSignedIn();
+        AdminSignedIn.setVisible(true);
+    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database

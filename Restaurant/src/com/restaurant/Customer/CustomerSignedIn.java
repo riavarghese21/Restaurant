@@ -60,8 +60,8 @@ public class CustomerSignedIn {
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(146, 10, 310, 16);
+		lblNewLabel.setBounds(0, 66, 784, 140);
 		frame.getContentPane().add(lblNewLabel);
-
 	}
 	
 	

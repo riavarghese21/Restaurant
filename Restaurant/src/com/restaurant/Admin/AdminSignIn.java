@@ -12,10 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.*;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import com.restaurant.Database;
+import com.restaurant.SignInPage;
 
 public class AdminSignIn {
 
@@ -55,7 +54,6 @@ public class AdminSignIn {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		setLookAndFeel();
 		signInButton();
 		
 		usernameTF = new JTextField();
@@ -76,7 +74,20 @@ public class AdminSignIn {
 		pswdLBL.setBounds(72, 76, 310, 14);
 		frame.getContentPane().add(pswdLBL);
 
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToSignInPage();
+            }
+        });
 	}
+    private void goToSignInPage() {
+        frame.dispose();
+        SignInPage signInPage = new SignInPage();
+        signInPage.setVisible(true);
+    }
 	public void signInButton() {
 		JButton signInBTN = new JButton("Sign-in");
 		signInBTN.setBounds(72, 134, 310, 29);
@@ -109,11 +120,7 @@ public class AdminSignIn {
             System.out.println("MySQL Driver not found: " + e.getMessage());
         }
     }
-	
-	//Makes the UI look modern if the user is on Windows
-	public void setLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) { }
-	}
+	public void setVisible(boolean visible) {
+		frame.setVisible(visible);
+    }
 }

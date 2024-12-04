@@ -63,7 +63,7 @@ public class AdminDeleteEmployee {
 		frame.getContentPane().add(employeeCB);
 		
 		JButton deleteButton = new JButton("Delete Account");
-		deleteButton.setBounds(117, 202, 180, 23);
+		deleteButton.setBounds(105, 186, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -73,7 +73,20 @@ public class AdminDeleteEmployee {
 		});
 
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	goToAdminManageEmployeesPage();
+            }
+        });
 	}
+    private void goToAdminManageEmployeesPage() {
+        frame.dispose();
+        AdminManageEmployees AdminManageEmployees = new AdminManageEmployees();
+        AdminManageEmployees.setVisible(true);
+    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database

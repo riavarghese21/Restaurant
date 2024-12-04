@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import com.restaurant.SignInPage;
+
 import javax.swing.JButton;
 
 public class AdminSignedIn {
@@ -40,18 +43,28 @@ public class AdminSignedIn {
 	 */
 	public void initialize() {
 		frame = new JFrame("Admin");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		setLookAndFeel();
 		manageEmployeesButton();
 		manageCustomersButton();
 		manageMenuButton();
 		manageReservationsButton();
 		manageOrdersButton();
 		deleteReviewsButton();
+		logoutButton();
 	}
-	
+    public void logoutButton() {
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBounds(72, 271, 310, 29); // Adjust bounds as per your layout
+        frame.getContentPane().add(logoutButton);
+     
+        logoutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Exit the application
+            }
+        });
+    }
 	public void manageEmployeesButton() {
 		JButton manageEmployeesButton = new JButton("Manage Employees");
 		manageEmployeesButton.setBounds(72, 11, 310, 29);
@@ -118,7 +131,7 @@ public class AdminSignedIn {
 	}
 	public void manageOrdersButton() {
 		JButton manageOrdersButton = new JButton("Delete Orders");
-		manageOrdersButton.setBounds(72, 181, 310, 29);
+		manageOrdersButton.setBounds(72, 171, 310, 29);
 		frame.getContentPane().add(manageOrdersButton);
 		manageOrdersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,7 +147,7 @@ public class AdminSignedIn {
 	}
 	public void deleteReviewsButton() {
 		JButton manageReviewsButton = new JButton("Delete Reviews");
-		manageReviewsButton.setBounds(72, 221, 310, 29);
+		manageReviewsButton.setBounds(72, 211, 310, 29);
 		frame.getContentPane().add(manageReviewsButton);
 		manageReviewsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -148,10 +161,7 @@ public class AdminSignedIn {
 		ADR.initialize();
 		ADR.frame.setVisible(true);
 	}
-	//Makes the UI look modern if the user is on Windows
-	public void setLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) { }
-	}
+	public void setVisible(boolean visible) {
+		frame.setVisible(visible);
+    }
 }

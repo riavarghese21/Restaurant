@@ -73,7 +73,20 @@ public class AdminManageMenu {
 				goToDeleteItem();
 			}
 		});
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToAdminSignedInPage();
+            }
+        });
 	}
+    private void goToAdminSignedInPage() {
+        frame.dispose();
+        AdminSignedIn AdminSignedIn = new AdminSignedIn();
+        AdminSignedIn.setVisible(true);
+    }
 	public void goToAddItem() {
 		frame.dispose();
 		AdminAddItem AAI = new AdminAddItem(); 
@@ -94,5 +107,7 @@ public class AdminManageMenu {
 		ADI.initialize();
 		ADI.frame.setVisible(true);
 	}
-
+	public void setVisible(boolean visible) {
+		frame.setVisible(visible);
+    }
 }

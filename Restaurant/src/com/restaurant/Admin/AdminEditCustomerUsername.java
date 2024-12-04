@@ -86,7 +86,20 @@ public class AdminEditCustomerUsername {
 		newUser.setColumns(10);
 		
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	goToAdminManageCustomersPage();
+            }
+        });
 	}
+    private void goToAdminManageCustomersPage() {
+        frame.dispose();
+        AdminManageCustomers AdminManageCustomers = new AdminManageCustomers();
+        AdminManageCustomers.setVisible(true);
+    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database
