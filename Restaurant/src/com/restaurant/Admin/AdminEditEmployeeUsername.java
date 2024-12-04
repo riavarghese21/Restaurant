@@ -17,6 +17,8 @@ import com.restaurant.Database;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminEditEmployeeUsername {
 
@@ -25,6 +27,7 @@ public class AdminEditEmployeeUsername {
 	static DefaultComboBoxModel<String> employeeCBModel = new DefaultComboBoxModel<String>();
 	private JLabel newUserLBL;
 	private JTextField newUser;
+	private JLabel lblEditEmployeeUsername;
 
 	/**
 	 * Launch the application.
@@ -58,8 +61,14 @@ public class AdminEditEmployeeUsername {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		lblEditEmployeeUsername = new JLabel("Edit Employee Username");
+		lblEditEmployeeUsername.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEditEmployeeUsername.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblEditEmployeeUsername.setBounds(75, 10, 310, 20);
+		frame.getContentPane().add(lblEditEmployeeUsername);
+		
 		JButton modifyButton = new JButton("Modify Info");
-		modifyButton.setBounds(165, 204, 89, 23);
+		modifyButton.setBounds(125, 186, 210, 23);
 		frame.getContentPane().add(modifyButton);
 		
 		modifyButton.addActionListener(new ActionListener() {
@@ -69,25 +78,25 @@ public class AdminEditEmployeeUsername {
 		});
 		
 		JLabel usernameLBL = new JLabel("Old Username");
-		usernameLBL.setBounds(165, 24, 88, 14);
+		usernameLBL.setBounds(125, 57, 210, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		newUserLBL = new JLabel("New Username");
-		newUserLBL.setBounds(165, 86, 88, 14);
+		newUserLBL.setBounds(125, 117, 210, 14);
 		frame.getContentPane().add(newUserLBL);
 		
 		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(165, 49, 88, 22);
+		employeeCB.setBounds(125, 83, 210, 22);
 		frame.getContentPane().add(employeeCB);
 		
 		newUser = new JTextField();
-		newUser.setBounds(165, 111, 89, 20);
+		newUser.setBounds(125, 143, 210, 20);
 		frame.getContentPane().add(newUser);
 		newUser.setColumns(10);
 		
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 230, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

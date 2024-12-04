@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminDeleteReservations {
 
@@ -56,15 +58,21 @@ public class AdminDeleteReservations {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel selectReservationLBL = new JLabel("Select Reservation");
-		selectReservationLBL.setBounds(105, 24, 134, 14);
+		selectReservationLBL.setBounds(135, 90, 134, 14);
 		frame.getContentPane().add(selectReservationLBL);
 		
+		JLabel lblDeleteReservation = new JLabel("Delete Reservation");
+		lblDeleteReservation.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeleteReservation.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblDeleteReservation.setBounds(75, 10, 310, 16);
+		frame.getContentPane().add(lblDeleteReservation);
+		
 		reservationCB = new JComboBox<String>();
-		reservationCB.setBounds(105, 82, 192, 22);
+		reservationCB.setBounds(135, 116, 192, 22);
 		frame.getContentPane().add(reservationCB);
 		
 		JButton deleteButton = new JButton("Delete Reservation");
-		deleteButton.setBounds(105, 187, 192, 23);
+		deleteButton.setBounds(135, 187, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -76,7 +84,7 @@ public class AdminDeleteReservations {
 		populateComboBox();
 
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 230, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

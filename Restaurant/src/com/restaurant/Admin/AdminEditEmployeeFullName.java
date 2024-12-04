@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminEditEmployeeFullName {
 
@@ -25,6 +27,7 @@ public class AdminEditEmployeeFullName {
 	static DefaultComboBoxModel<String> employeeCBModel = new DefaultComboBoxModel<String>();
 	private JLabel newNameLBL;
 	private JTextField newName;
+	private JLabel lblEditEmployeeName;
 
 	/**
 	 * Launch the application.
@@ -58,8 +61,14 @@ public class AdminEditEmployeeFullName {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		lblEditEmployeeName = new JLabel("Edit Employee Name");
+		lblEditEmployeeName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEditEmployeeName.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblEditEmployeeName.setBounds(75, 10, 310, 20);
+		frame.getContentPane().add(lblEditEmployeeName);
+		
 		JButton modifyButton = new JButton("Modify Info");
-		modifyButton.setBounds(165, 204, 89, 23);
+		modifyButton.setBounds(125, 175, 210, 23);
 		frame.getContentPane().add(modifyButton);
 		
 		modifyButton.addActionListener(new ActionListener() {
@@ -69,25 +78,25 @@ public class AdminEditEmployeeFullName {
 		});
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(165, 24, 88, 14);
+		usernameLBL.setBounds(125, 57, 210, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		newNameLBL = new JLabel("New Name");
-		newNameLBL.setBounds(165, 86, 88, 14);
+		newNameLBL.setBounds(125, 117, 210, 14);
 		frame.getContentPane().add(newNameLBL);
 		
 		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(165, 49, 88, 22);
+		employeeCB.setBounds(125, 83, 210, 22);
 		frame.getContentPane().add(employeeCB);
 		
 		newName = new JTextField();
-		newName.setBounds(165, 111, 89, 20);
+		newName.setBounds(125, 143, 210, 20);
 		frame.getContentPane().add(newName);
 		newName.setColumns(10);
 		
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 220, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

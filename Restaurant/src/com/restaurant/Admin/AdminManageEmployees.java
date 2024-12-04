@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import com.restaurant.SignInPage;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminManageEmployees {
 
@@ -42,12 +45,18 @@ public class AdminManageEmployees {
 	 */
 	public void initialize() {
 		frame = new JFrame("Manage Employees");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 500, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		JLabel lblManageEmployees = new JLabel("Manage Employees");
+		lblManageEmployees.setHorizontalAlignment(SwingConstants.CENTER);
+		lblManageEmployees.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblManageEmployees.setBounds(95, 10, 310, 30);
+		frame.getContentPane().add(lblManageEmployees);
+		
 		JButton manageEmployeesButton = new JButton("Create Employee");
-		manageEmployeesButton.setBounds(72, 22, 310, 29);
+		manageEmployeesButton.setBounds(95, 70, 310, 29);
 		frame.getContentPane().add(manageEmployeesButton);
 		
 		manageEmployeesButton.addActionListener(new ActionListener() {
@@ -57,7 +66,7 @@ public class AdminManageEmployees {
 		});
 		
 		JButton deleteEmployeesButton = new JButton("Delete Employee");
-		deleteEmployeesButton.setBounds(72, 62, 310, 29);
+		deleteEmployeesButton.setBounds(95, 110, 310, 29);
 		frame.getContentPane().add(deleteEmployeesButton);
 		
 		deleteEmployeesButton.addActionListener(new ActionListener() {
@@ -67,7 +76,7 @@ public class AdminManageEmployees {
 		});
 		
 		JButton editUsernameButton = new JButton("Edit Username");
-		editUsernameButton.setBounds(72, 102, 310, 29);
+		editUsernameButton.setBounds(95, 150, 310, 29);
 		frame.getContentPane().add(editUsernameButton);
 		
 		editUsernameButton.addActionListener(new ActionListener() {
@@ -77,7 +86,7 @@ public class AdminManageEmployees {
 		});
 		
 		JButton editPasswordButton = new JButton("Edit Password");
-		editPasswordButton.setBounds(72, 142, 310, 29);
+		editPasswordButton.setBounds(95, 190, 310, 29);
 		frame.getContentPane().add(editPasswordButton);
 		
 		editPasswordButton.addActionListener(new ActionListener() {
@@ -87,7 +96,7 @@ public class AdminManageEmployees {
 		});
 		
 		JButton editFullNameButton = new JButton("Edit Name");
-		editFullNameButton.setBounds(72, 182, 310, 29);
+		editFullNameButton.setBounds(95, 230, 310, 29);
 		frame.getContentPane().add(editFullNameButton);
 		editFullNameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,7 +104,7 @@ public class AdminManageEmployees {
 			}
 		});
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(21, 277, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

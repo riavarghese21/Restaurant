@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminEditCustomerFullName {
 
@@ -25,6 +27,7 @@ public class AdminEditCustomerFullName {
 	static DefaultComboBoxModel<String> customerCBModel = new DefaultComboBoxModel<String>();
 	private JLabel newNameLBL;
 	private JTextField newName;
+	private JLabel lblModifyCustomerName;
 
 	/**
 	 * Launch the application.
@@ -58,8 +61,14 @@ public class AdminEditCustomerFullName {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		lblModifyCustomerName = new JLabel("Modify Customer Name");
+		lblModifyCustomerName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblModifyCustomerName.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblModifyCustomerName.setBounds(75, 10, 310, 20);
+		frame.getContentPane().add(lblModifyCustomerName);
+		
 		JButton modifyButton = new JButton("Modify Info");
-		modifyButton.setBounds(165, 204, 89, 23);
+		modifyButton.setBounds(125, 204, 210, 23);
 		frame.getContentPane().add(modifyButton);
 		
 		modifyButton.addActionListener(new ActionListener() {
@@ -69,19 +78,19 @@ public class AdminEditCustomerFullName {
 		});
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(165, 24, 88, 14);
+		usernameLBL.setBounds(125, 58, 88, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		newNameLBL = new JLabel("New Name");
-		newNameLBL.setBounds(165, 86, 88, 14);
+		newNameLBL.setBounds(125, 128, 88, 14);
 		frame.getContentPane().add(newNameLBL);
 		
 		customerCB = new JComboBox<String>();
-		customerCB.setBounds(165, 49, 88, 22);
+		customerCB.setBounds(125, 84, 210, 22);
 		frame.getContentPane().add(customerCB);
 		
 		newName = new JTextField();
-		newName.setBounds(165, 111, 89, 20);
+		newName.setBounds(125, 154, 210, 20);
 		frame.getContentPane().add(newName);
 		newName.setColumns(10);
 		

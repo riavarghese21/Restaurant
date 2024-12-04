@@ -20,6 +20,8 @@ import com.restaurant.Database;
 import com.restaurant.Encryption;
 
 import javax.swing.JPasswordField;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminEditCustomerPassword {
 
@@ -28,6 +30,7 @@ public class AdminEditCustomerPassword {
 	static DefaultComboBoxModel<String> customerCBModel = new DefaultComboBoxModel<String>();
 	private JLabel newPasswordLBL;
 	private static JPasswordField newPassword;
+	private JLabel lblModifyCustomerPassword;
 
 	/**
 	 * Launch the application.
@@ -61,8 +64,14 @@ public class AdminEditCustomerPassword {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		lblModifyCustomerPassword = new JLabel("Modify Customer Password");
+		lblModifyCustomerPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblModifyCustomerPassword.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblModifyCustomerPassword.setBounds(75, 10, 310, 20);
+		frame.getContentPane().add(lblModifyCustomerPassword);
+		
 		JButton modifyButton = new JButton("Modify Info");
-		modifyButton.setBounds(165, 204, 89, 23);
+		modifyButton.setBounds(125, 191, 210, 23);
 		frame.getContentPane().add(modifyButton);
 		
 		modifyButton.addActionListener(new ActionListener() {
@@ -72,25 +81,25 @@ public class AdminEditCustomerPassword {
 		});
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(165, 24, 88, 14);
+		usernameLBL.setBounds(125, 65, 88, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		newPasswordLBL = new JLabel("New Password");
-		newPasswordLBL.setBounds(165, 86, 88, 14);
+		newPasswordLBL.setBounds(125, 128, 101, 14);
 		frame.getContentPane().add(newPasswordLBL);
 		
 		customerCB = new JComboBox<String>();
-		customerCB.setBounds(165, 49, 88, 22);
+		customerCB.setBounds(125, 94, 210, 22);
 		frame.getContentPane().add(customerCB);
 		
 		newPassword = new JPasswordField();
-		newPassword.setBounds(165, 111, 89, 20);
+		newPassword.setBounds(125, 153, 210, 20);
 		frame.getContentPane().add(newPassword);
 		newPassword.setColumns(10);
 		
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 230, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

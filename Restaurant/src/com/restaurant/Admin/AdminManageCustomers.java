@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminManageCustomers {
 
@@ -43,6 +46,12 @@ public class AdminManageCustomers {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JLabel lblManageCustomers = new JLabel("Manage Customers");
+		lblManageCustomers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblManageCustomers.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblManageCustomers.setBounds(75, 10, 310, 16);
+		frame.getContentPane().add(lblManageCustomers);
 
 		JButton deleteCustomerButton = new JButton("Delete Customer");
 		deleteCustomerButton.setBounds(72, 62, 310, 29);
@@ -55,7 +64,7 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editUsernameButton = new JButton("Edit Username");
-		editUsernameButton.setBounds(72, 102, 310, 29);
+		editUsernameButton.setBounds(75, 138, 310, 29);
 		frame.getContentPane().add(editUsernameButton);
 		
 		editUsernameButton.addActionListener(new ActionListener() {
@@ -65,7 +74,7 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editPasswordButton = new JButton("Edit Password");
-		editPasswordButton.setBounds(72, 142, 310, 29);
+		editPasswordButton.setBounds(75, 179, 310, 29);
 		frame.getContentPane().add(editPasswordButton);
 		
 		editPasswordButton.addActionListener(new ActionListener() {
@@ -75,15 +84,16 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editFullNameButton = new JButton("Edit Name");
-		editFullNameButton.setBounds(165, 111, 89, 20);
+		editFullNameButton.setBounds(75, 99, 310, 29);
 		frame.getContentPane().add(editFullNameButton);
+		
 		editFullNameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				goToEditFullName();
 			}
 		});
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 220, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

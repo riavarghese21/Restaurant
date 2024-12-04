@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 
 public class AdminDeleteEmployee {
@@ -55,15 +57,21 @@ public class AdminDeleteEmployee {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel selectEmployeeLBL = new JLabel("Select Employee");
-		selectEmployeeLBL.setBounds(105, 24, 134, 14);
+		selectEmployeeLBL.setBounds(130, 82, 134, 14);
 		frame.getContentPane().add(selectEmployeeLBL);
 		
+		JLabel lblDeleteEmployee = new JLabel("Delete Employee");
+		lblDeleteEmployee.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeleteEmployee.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblDeleteEmployee.setBounds(65, 10, 310, 20);
+		frame.getContentPane().add(lblDeleteEmployee);
+		
 		employeeCB = new JComboBox<String>();
-		employeeCB.setBounds(105, 82, 192, 22);
+		employeeCB.setBounds(130, 108, 192, 22);
 		frame.getContentPane().add(employeeCB);
 		
 		JButton deleteButton = new JButton("Delete Account");
-		deleteButton.setBounds(105, 186, 192, 23);
+		deleteButton.setBounds(130, 188, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -74,7 +82,7 @@ public class AdminDeleteEmployee {
 
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(23, 230, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

@@ -16,10 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminDeleteOrders {
 
 	public JFrame frame;
+	private JFrame frame_1;
 	private static JComboBox<String> orderCB;
 	static DefaultComboBoxModel<String> orderCBModel = new DefaultComboBoxModel<String>();
 
@@ -31,7 +34,7 @@ public class AdminDeleteOrders {
 			public void run() {
 				try {
 					AdminDeleteOrders window = new AdminDeleteOrders();
-					window.frame.setVisible(true);
+					window.frame_1.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -55,22 +58,28 @@ public class AdminDeleteOrders {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		frame = new JFrame("Delete Order");
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame_1 = new JFrame("Delete Order");
+		frame_1.setBounds(100, 100, 450, 300);
+		frame_1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame_1.getContentPane().setLayout(null);
 		
 		JLabel selectOrderLBL = new JLabel("Select Order");
-		selectOrderLBL.setBounds(105, 24, 134, 14);
-		frame.getContentPane().add(selectOrderLBL);
+		selectOrderLBL.setBounds(130, 72, 134, 14);
+		frame_1.getContentPane().add(selectOrderLBL);
 		
 		orderCB = new JComboBox<String>();
-		orderCB.setBounds(105, 82, 192, 22);
-		frame.getContentPane().add(orderCB);
+		orderCB.setBounds(130, 98, 192, 22);
+		frame_1.getContentPane().add(orderCB);
+		
+		JLabel lblDeleteCustomerAccount = new JLabel("Delete Order");
+		lblDeleteCustomerAccount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeleteCustomerAccount.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblDeleteCustomerAccount.setBounds(75, 10, 310, 16);
+		frame_1.getContentPane().add(lblDeleteCustomerAccount);
 		
 		JButton deleteButton = new JButton("Delete Order");
-		deleteButton.setBounds(105, 183, 192, 23);
-		frame.getContentPane().add(deleteButton);
+		deleteButton.setBounds(130, 159, 192, 23);
+		frame_1.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -80,8 +89,8 @@ public class AdminDeleteOrders {
 
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
-        frame.getContentPane().add(backButton);
+        backButton.setBounds(25, 220, 80, 25);
+        frame_1.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 goToAdminSignedInPage();
@@ -89,7 +98,7 @@ public class AdminDeleteOrders {
         });
 	}
     private void goToAdminSignedInPage() {
-        frame.dispose();
+        frame_1.dispose();
         AdminSignedIn AdminSignedIn = new AdminSignedIn();
         AdminSignedIn.setVisible(true);
     }

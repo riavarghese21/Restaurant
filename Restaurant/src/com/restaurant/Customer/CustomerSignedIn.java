@@ -59,8 +59,7 @@ public class CustomerSignedIn {
 	    JLabel lblNewLabel = new JLabel("Welcome!");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(146, 10, 310, 16);
-		lblNewLabel.setBounds(0, 66, 784, 140);
+		lblNewLabel.setBounds(145, 19, 310, 16);
 		frame.getContentPane().add(lblNewLabel);
 	}
 	

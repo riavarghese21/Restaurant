@@ -1,7 +1,6 @@
 package com.restaurant.Admin;
 
 import java.awt.*;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,33 +48,38 @@ public class AdminSignIn {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Admin Sign in page");
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame = new JFrame("Admin Sign In");
+        frame.setBounds(100, 100, 400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
 		
 		signInButton();
 		
+		JLabel loginLabel = new JLabel("Admin Login");
+        loginLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+        loginLabel.setBounds(150, 21, 150, 30);
+        frame.getContentPane().add(loginLabel);
+		
 		usernameTF = new JTextField();
-		usernameTF.setBounds(72, 36, 310, 29);
+		usernameTF.setBounds(139, 80, 180, 25);
 		frame.getContentPane().add(usernameTF);
 		usernameTF.setColumns(10);
 		
 		pswdTF = new JPasswordField();
-		pswdTF.setBounds(72, 94, 310, 29);
+		pswdTF.setBounds(139, 120, 180, 25);
 		frame.getContentPane().add(pswdTF);
 		pswdTF.setColumns(10);
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(72, 11, 310, 14);
+		usernameLBL.setBounds(66, 81, 80, 25);
 		frame.getContentPane().add(usernameLBL);
 		
 		JLabel pswdLBL = new JLabel("Password");
-		pswdLBL.setBounds(72, 76, 310, 14);
+		pswdLBL.setBounds(66, 121, 80, 25);
 		frame.getContentPane().add(pswdLBL);
 
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 229, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +94,7 @@ public class AdminSignIn {
     }
 	public void signInButton() {
 		JButton signInBTN = new JButton("Sign-in");
-		signInBTN.setBounds(72, 134, 310, 29);
+		signInBTN.setBounds(150, 170, 100, 30);
 		frame.getContentPane().add(signInBTN);
 		signInBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

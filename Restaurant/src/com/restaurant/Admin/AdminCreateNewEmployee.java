@@ -55,38 +55,44 @@ public class AdminCreateNewEmployee {
 	 */
 	public void initialize() {
 		frame = new JFrame("Create New Employee");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 500, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(130, 11, 56, 14);
+		usernameLBL.setBounds(95, 65, 80, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		usernameTF = new JTextField();
-		usernameTF.setBounds(130, 36, 158, 20);
+		usernameTF.setBounds(95, 91, 310, 20);
 		frame.getContentPane().add(usernameTF);
 		usernameTF.setColumns(10);
 		
 		JLabel pswdLBL = new JLabel("Password");
-		pswdLBL.setBounds(130, 67, 46, 14);
+		pswdLBL.setBounds(95, 123, 80, 14);
 		frame.getContentPane().add(pswdLBL);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(130, 92, 158, 20);
+		passwordField.setBounds(95, 149, 310, 20);
 		frame.getContentPane().add(passwordField);
 		
+		JLabel lblCreateEmployeeAccount = new JLabel("Create Employee Account");
+		lblCreateEmployeeAccount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCreateEmployeeAccount.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblCreateEmployeeAccount.setBounds(95, 10, 310, 20);
+		frame.getContentPane().add(lblCreateEmployeeAccount);
+		
 		JLabel fullNameLBL = new JLabel("Full Name");
-		fullNameLBL.setBounds(130, 123, 46, 14);
+		fullNameLBL.setBounds(95, 181, 63, 14);
 		frame.getContentPane().add(fullNameLBL);
 		
 		fullNameTF = new JTextField();
-		fullNameTF.setBounds(130, 148, 158, 20);
+		fullNameTF.setBounds(95, 207, 310, 20);
 		frame.getContentPane().add(fullNameTF);
 		fullNameTF.setColumns(10);
 		
 		JButton createEmployeeButton = new JButton("Create Account");
-		createEmployeeButton.setBounds(145, 208, 124, 23);
+		createEmployeeButton.setBounds(175, 239, 124, 23);
 		frame.getContentPane().add(createEmployeeButton);
 		
 		createEmployeeButton.addActionListener(new ActionListener() {
@@ -95,7 +101,7 @@ public class AdminCreateNewEmployee {
 			}
 		});
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(21, 279, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

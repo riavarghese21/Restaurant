@@ -10,6 +10,9 @@ import javax.swing.UIManager;
 import com.restaurant.SignInPage;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminSignedIn {
 
@@ -43,7 +46,7 @@ public class AdminSignedIn {
 	 */
 	public void initialize() {
 		frame = new JFrame("Admin");
-		frame.setBounds(100, 100, 450, 350);
+		frame.setBounds(100, 100, 500, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		manageEmployeesButton();
@@ -56,7 +59,7 @@ public class AdminSignedIn {
 	}
     public void logoutButton() {
         JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(72, 271, 310, 29); // Adjust bounds as per your layout
+        logoutButton.setBounds(95, 294, 310, 29); // Adjust bounds as per your layout
         frame.getContentPane().add(logoutButton);
      
         logoutButton.addActionListener(new ActionListener() {
@@ -66,8 +69,15 @@ public class AdminSignedIn {
         });
     }
 	public void manageEmployeesButton() {
+		{
+			JLabel lblWelcomeAdmin = new JLabel("Welcome Admin!");
+			lblWelcomeAdmin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblWelcomeAdmin.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+			lblWelcomeAdmin.setBounds(95, 10, 310, 16);
+			frame.getContentPane().add(lblWelcomeAdmin);
+		}
 		JButton manageEmployeesButton = new JButton("Manage Employees");
-		manageEmployeesButton.setBounds(72, 11, 310, 29);
+		manageEmployeesButton.setBounds(95, 48, 310, 29);
 		frame.getContentPane().add(manageEmployeesButton);
 		manageEmployeesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -83,7 +93,7 @@ public class AdminSignedIn {
 	}
 	public void manageCustomersButton() {
 		JButton manageCustomersButton = new JButton("Manage Customers");
-		manageCustomersButton.setBounds(72, 51, 310, 29);
+		manageCustomersButton.setBounds(95, 89, 310, 29);
 		frame.getContentPane().add(manageCustomersButton);
 		manageCustomersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -99,7 +109,7 @@ public class AdminSignedIn {
 	}
 	public void manageMenuButton() {
 		JButton manageMenuButton = new JButton("Manage Menu");
-		manageMenuButton.setBounds(72, 91, 310, 29);
+		manageMenuButton.setBounds(95, 130, 310, 29);
 		frame.getContentPane().add(manageMenuButton);
 		manageMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +125,7 @@ public class AdminSignedIn {
 	}
 	public void manageReservationsButton() {
 		JButton manageReservationsButton = new JButton("Delete Reservations");
-		manageReservationsButton.setBounds(72, 131, 310, 29);
+		manageReservationsButton.setBounds(95, 171, 310, 29);
 		frame.getContentPane().add(manageReservationsButton);
 		manageReservationsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,7 +141,7 @@ public class AdminSignedIn {
 	}
 	public void manageOrdersButton() {
 		JButton manageOrdersButton = new JButton("Delete Orders");
-		manageOrdersButton.setBounds(72, 171, 310, 29);
+		manageOrdersButton.setBounds(95, 212, 310, 29);
 		frame.getContentPane().add(manageOrdersButton);
 		manageOrdersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,7 +157,7 @@ public class AdminSignedIn {
 	}
 	public void deleteReviewsButton() {
 		JButton manageReviewsButton = new JButton("Delete Reviews");
-		manageReviewsButton.setBounds(72, 211, 310, 29);
+		manageReviewsButton.setBounds(95, 253, 310, 29);
 		frame.getContentPane().add(manageReviewsButton);
 		manageReviewsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

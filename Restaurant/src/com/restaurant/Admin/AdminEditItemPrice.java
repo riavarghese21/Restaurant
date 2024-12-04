@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminEditItemPrice {
 
@@ -25,6 +27,7 @@ public class AdminEditItemPrice {
 	static DefaultComboBoxModel<String> menuCBModel = new DefaultComboBoxModel<String>();
 	private JLabel ItemLBL;
 	private JTextField newPrice;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -59,7 +62,7 @@ public class AdminEditItemPrice {
 		frame.getContentPane().setLayout(null);
 		
 		JButton modifyButton = new JButton("Modify Price");
-		modifyButton.setBounds(165, 204, 89, 23);
+		modifyButton.setBounds(125, 187, 210, 23);
 		frame.getContentPane().add(modifyButton);
 		
 		modifyButton.addActionListener(new ActionListener() {
@@ -69,26 +72,32 @@ public class AdminEditItemPrice {
 		});
 		
 		JLabel usernameLBL = new JLabel("Old Price");
-		usernameLBL.setBounds(165, 24, 88, 14);
+		usernameLBL.setBounds(125, 59, 210, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		ItemLBL = new JLabel("New Price");
-		ItemLBL.setBounds(165, 86, 88, 14);
+		ItemLBL.setBounds(125, 119, 210, 14);
 		frame.getContentPane().add(ItemLBL);
 		
 		menuCB = new JComboBox<String>();
-		menuCB.setBounds(165, 49, 88, 22);
+		menuCB.setBounds(125, 85, 210, 22);
 		frame.getContentPane().add(menuCB);
 		
 		newPrice = new JTextField();
-		newPrice.setBounds(165, 111, 89, 20);
+		newPrice.setBounds(125, 145, 210, 20);
 		frame.getContentPane().add(newPrice);
 		newPrice.setColumns(10);
 		
 		populateComboBox();
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(25, 230, 80, 25);
         frame.getContentPane().add(backButton);
+        
+        lblNewLabel = new JLabel("Edit Item Price");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+        lblNewLabel.setBounds(75, 10, 310, 16);
+        frame.getContentPane().add(lblNewLabel);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	goToAdminManageMenuPage();

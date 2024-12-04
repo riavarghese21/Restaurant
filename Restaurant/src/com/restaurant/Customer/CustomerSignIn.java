@@ -44,36 +44,36 @@ public class CustomerSignIn {
      * Initialize the contents of the frame.
      */
     public void initialize() {
-        frame = new JFrame("Customer Sign In");
+    	frame = new JFrame("Customer Sign In");
         frame.setBounds(100, 100, 400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
         JLabel loginLabel = new JLabel("Customer Login");
         loginLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-        loginLabel.setBounds(125, 20, 150, 30);
+        loginLabel.setBounds(129, 21, 150, 30);
         frame.getContentPane().add(loginLabel);
 
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setBounds(50, 80, 80, 25);
+        usernameLabel.setBounds(66, 81, 80, 25);
         frame.getContentPane().add(usernameLabel);
 
         usernameField = new JTextField();
-        usernameField.setBounds(150, 80, 180, 25);
+        usernameField.setBounds(139, 80, 180, 25);
         frame.getContentPane().add(usernameField);
         usernameField.setColumns(10);
 
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(50, 120, 80, 25);
+        passwordLabel.setBounds(66, 121, 80, 25);
         frame.getContentPane().add(passwordLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(150, 120, 180, 25);
+        passwordField.setBounds(139, 120, 180, 25);
         frame.getContentPane().add(passwordField);
         passwordField.setColumns(10);
 
         JButton loginButton = new JButton("Login");
-        loginButton.setBounds(175, 174, 100, 30);
+        loginButton.setBounds(150, 170, 100, 30);
         frame.getContentPane().add(loginButton);
 
         loginButton.addActionListener(new ActionListener() {
@@ -83,7 +83,7 @@ public class CustomerSignIn {
         });
 
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 220, 80, 25);
+        backButton.setBounds(21, 229, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -92,7 +92,7 @@ public class CustomerSignIn {
         });
 
         JButton createAccountButton = new JButton("Create Account");
-        createAccountButton.setBounds(173, 202, 121, 30);
+        createAccountButton.setBounds(140, 201, 121, 30);
         frame.getContentPane().add(createAccountButton);
         createAccountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

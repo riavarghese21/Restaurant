@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.restaurant.Database;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class AdminDeleteItem {
 
@@ -56,15 +58,21 @@ public class AdminDeleteItem {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel selectItemLBL = new JLabel("Select Item");
-		selectItemLBL.setBounds(105, 24, 134, 14);
+		selectItemLBL.setBounds(135, 81, 134, 14);
 		frame.getContentPane().add(selectItemLBL);
 		
 		itemCB = new JComboBox<String>();
-		itemCB.setBounds(105, 82, 192, 22);
+		itemCB.setBounds(135, 107, 192, 22);
 		frame.getContentPane().add(itemCB);
 		
+		JLabel lblDelete = new JLabel("Delete Item from Menu");
+		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDelete.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblDelete.setBounds(75, 10, 310, 16);
+		frame.getContentPane().add(lblDelete);
+		
 		JButton deleteButton = new JButton("Delete Item");
-		deleteButton.setBounds(105, 186, 192, 23);
+		deleteButton.setBounds(135, 180, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -75,7 +83,7 @@ public class AdminDeleteItem {
 
 		populateComboBox();
 	       JButton backButton = new JButton("Back");
-	        backButton.setBounds(50, 220, 80, 25);
+	        backButton.setBounds(25, 230, 80, 25);
 	        frame.getContentPane().add(backButton);
 	        backButton.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
