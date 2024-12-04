@@ -1,87 +1,137 @@
-use restaurantdb;
+CREATE DATABASE restaurantdb;
+USE restaurantdb;
 
-create table Customers(
+-- CUSTOMERS
+CREATE TABLE Customers(
+customer_id INT AUTO_INCREMENT,
+customer_name varchar(255),
+customer_dob varchar(255),
+customer_address varchar(255),
 customer_username varchar(255),
 customer_password varchar(255),
-customer_name varchar(255),
-customer_address varchar(255),
-primary key (customer_username)
+PRIMARY KEY (customer_id)
 );
 
-create Table Employees(
-employee_username varchar(255),
-employee_password varchar(255),
-employee_name varchar(255),
-primary key (employee_username)
+INSERT INTO Customers
+VALUE (2, "Testing", "01/01/01", "Testing", "Test", "Test");
+
+INSERT INTO Customers
+VALUES (1, 'Jane Doe', '05/15/1990', '123 Main St, Anytown, USA', 'janedoe', 'password123');
+
+
+SELECT * FROM Customers;
+
+CREATE TABLE Reservations (
+    reservation_id INT AUTO_INCREMENT,
+    customer_id INT,
+    reservation_date VARCHAR(255),
+    reservation_time TIME,
+    party_size INT,
+    reservation_status VARCHAR(255),
+    PRIMARY KEY (reservation_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
 
-create table PaymentInfo(
-card_number varchar(255),
-card_CVV varchar(255),
-card_expiration varchar(255),
-customer_username varchar(255),
-primary key (card_number),
-foreign key (customer_username) references Customers(customer_username)
+SELECT * FROM Reservations;
+
+CREATE TABLE Menu (
+	item_id INT AUTO_INCREMENT,
+    item_name VARCHAR (255),
+    item_price INT,
+    PRIMARY KEY (item_id)
 );
 
-create Table Menu(
-item_id int,
-item_name varchar(255),
-item_price double,
-primary key (item_id)
+INSERT INTO restaurantdb.Menu
+VALUE (1, 'California Roll', 10.00);
+
+INSERT INTO restaurantdb.Menu (item_name, item_price)
+VALUE ('Spicy Tuna Roll', 12.00);
+
+INSERT INTO restaurantdb.Menu (item_name, item_price)
+VALUE ('Salmon Sashimi', 15.00);
+
+CREATE TABLE PaymentInfo (
+	payment_info_id INT AUTO_INCREMENT,
+    customer_id INT,
+    card_type VARCHAR(255),
+    card_number INT,
+	expiration_month INT,
+    expiration_year INT, 
+    first_name VARCHAR(255), 
+    last_name VARCHAR(255), 
+    cvv INT, 
+    billing_address VARCHAR(255), 
+    city VARCHAR(255), 
+    state VARCHAR(255), 
+    zip_code INT,
+    PRIMARY KEY (payment_info_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
-create Table Reviews(
-review_id int,
-review_title varchar(255),
-review_contents varchar(255),
-review_rating int,
-primary key (review_id)
-);
-create Table Reservations(
-reservation_id int,
-reservation_time varchar(255),
-reservation_date varchar (255),
-primary key (reservation_id)
-);
-create Table Orders(
-order_id int,
-item_id int,
-order_status varchar(255),
-primary key (order_id),
-foreign key (item_id) references Menu(item_id)
+ALTER TABLE PaymentInfo MODIFY card_number VARCHAR(255);
+ALTER TABLE PaymentInfo MODIFY cvv VARCHAR(255);
+ALTER TABLE PaymentInfo MODIFY expiration_month VARCHAR(255);
+ALTER TABLE PaymentInfo MODIFY expiration_year VARCHAR(255);
+
+
+SELECT * FROM PaymentInfo;
+
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT,
+    customer_id INT,
+    order_date VARCHAR(255),
+    total_amount DECIMAL(10, 2),
+    order_status VARCHAR(255),
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
 
+CREATE TABLE OrderItems (
+    order_item_id INT AUTO_INCREMENT,
+    order_id INT,
+    item_id VARCHAR(255),
+    quantity INT,
+    price DECIMAL(10, 2),
+    PRIMARY KEY (order_item_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
 
-delete from PaymentInfo where customer_username = "jdoe";
-delete from Customers where customer_username = "jdoe";
-drop user 'jdoe'@'localhost';
+SELECT * FROM Orders;
+SELECT * FROM OrderItems;
 
-select user, host from mysql.user;
+CREATE TABLE Reviews (
+    review_id INT AUTO_INCREMENT,
+    customer_id INT,
+    review_rating INT,
+    review_title VARCHAR(255),
+    review_description VARCHAR (1000),
+    review_date VARCHAR(255),
+    review_response VARCHAR(1000),
+    PRIMARY KEY (review_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
 
-
-insert into Menu values(1, "Maki Roll", 14.95);
-insert into Reviews values(1, "Amazing", "This restaurant is awesome.", 5);
-insert into Reviews values(2, "This sucks", "This restaurant is terrible.", 1);
-insert into Reservations values(2, "6:00 PM", "12/22/24");
-insert into Orders values(2, 1, "Ready to be picked up");
-
-select *
-from Menu;
-select *
-from Reviews;
-select *
-from Reservations;
-select *
-from Orders;
+SELECT * FROM Reviews;
 
 
+CREATE TABLE GiftCards (
+    gift_card_id INT AUTO_INCREMENT,
+    card_code VARCHAR(255) UNIQUE,
+    customer_id INT,
+    amount DECIMAL(10, 2),
+    status VARCHAR(255),
+    purchased_date VARCHAR(255),
+    recipient_username VARCHAR(255),
+    PRIMARY KEY (gift_card_id),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
 
+SELECT * FROM GiftCards;
 
-select *
-from customers;
+SELECT SUM(total_amount) AS total_money 
+FROM Orders WHERE DATE(order_date) = ?;
 
-select *
-from employees;
+SELECT AVG(total_amount) AS average_money 
+FROM Orders WHERE DATE(order_date) = ?;
 
-select *
-from PaymentInfo
+SELECT COUNT(*) AS total_reservations 
+FROM Reservations WHERE reservation_date = ?;
