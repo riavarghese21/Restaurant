@@ -54,12 +54,12 @@ CREATE TABLE PaymentInfo (
 	payment_info_id INT AUTO_INCREMENT,
     customer_id INT,
     card_type VARCHAR(255),
-    card_number INT,
-	expiration_month INT,
-    expiration_year INT, 
+    card_number VARCHAR(255),
+	expiration_month VARCHAR(255),
+    expiration_year VARCHAR(255), 
     first_name VARCHAR(255), 
     last_name VARCHAR(255), 
-    cvv INT, 
+    cvv VARCHAR(255), 
     billing_address VARCHAR(255), 
     city VARCHAR(255), 
     state VARCHAR(255), 
@@ -67,11 +67,6 @@ CREATE TABLE PaymentInfo (
     PRIMARY KEY (payment_info_id),
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
-ALTER TABLE PaymentInfo MODIFY card_number VARCHAR(255);
-ALTER TABLE PaymentInfo MODIFY cvv VARCHAR(255);
-ALTER TABLE PaymentInfo MODIFY expiration_month VARCHAR(255);
-ALTER TABLE PaymentInfo MODIFY expiration_year VARCHAR(255);
-
 
 SELECT * FROM PaymentInfo;
 
@@ -88,15 +83,19 @@ CREATE TABLE Orders (
 CREATE TABLE OrderItems (
     order_item_id INT AUTO_INCREMENT,
     order_id INT,
-    item_id VARCHAR(255),
+    item_id INT,
     quantity INT,
     price DECIMAL(10, 2),
     PRIMARY KEY (order_item_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (item_id) REFERENCES Menu(item_id)
 );
 
 SELECT * FROM Orders;
 SELECT * FROM OrderItems;
+
+ALTER TABLE Orders MODIFY order_date DATE;
+
 
 CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT,
