@@ -52,12 +52,12 @@ public class AdminDeleteReviews {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Delete Item");
+		frame = new JFrame("Delete Review");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblDeleteItem = new JLabel("Delete Item");
+		JLabel lblDeleteItem = new JLabel("Delete Review");
 		lblDeleteItem.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteItem.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblDeleteItem.setBounds(75, 10, 310, 16);

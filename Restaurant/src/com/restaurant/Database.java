@@ -11,7 +11,7 @@ public class Database {
     public static void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurantdb?serverTimezone=EST", "root", "ria212002");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurantdb?serverTimezone=EST", "root", "#Jarman28mysql");
             System.out.println("Database connected successfully.");
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());

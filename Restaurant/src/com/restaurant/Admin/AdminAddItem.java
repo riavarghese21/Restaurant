@@ -61,15 +61,6 @@ public class AdminAddItem {
 		lblNewLabel.setBounds(100, 10, 310, 16);
 		frame.getContentPane().add(lblNewLabel);
 		
-		JLabel IDLBL = new JLabel("Item Id");
-		IDLBL.setBounds(111, 79, 56, 14);
-		frame.getContentPane().add(IDLBL);
-		
-		itemIdTF = new JTextField();
-		itemIdTF.setBounds(111, 105, 310, 20);
-		frame.getContentPane().add(itemIdTF);
-		itemIdTF.setColumns(10);
-		
 		JLabel NameLBL = new JLabel("Item Name");
 		NameLBL.setBounds(111, 151, 68, 14);
 		frame.getContentPane().add(NameLBL);
@@ -114,11 +105,10 @@ public class AdminAddItem {
 	public void addNewEmployee() {
 		try {
 			Connection connection = Database.connection;
-			String query = "INSERT INTO Menu VALUES (?, ?, ?)";
+			String query = "INSERT INTO Menu (item_name, item_price) VALUES (?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
-			stm.setInt(1, Integer.parseInt(itemIdTF.getText()));
-			stm.setString(2, itemNameTF.getText());
-			stm.setDouble(3, Double.parseDouble(itemPriceTF.getText()));
+			stm.setString(1, itemNameTF.getText());
+			stm.setDouble(2, Double.parseDouble(itemPriceTF.getText()));
 
 			stm.executeUpdate();
 
