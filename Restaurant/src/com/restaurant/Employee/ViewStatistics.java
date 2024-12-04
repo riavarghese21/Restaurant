@@ -41,7 +41,7 @@ public class ViewStatistics {
         frame = new JFrame("View Statistics");
         frame.setBounds(100, 100, 600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null); // Using Absolute Layout
+        frame.getContentPane().setLayout(null); 
 
         // Title Label
         JLabel titleLabel = new JLabel("Daily Statistics");
@@ -100,12 +100,9 @@ public class ViewStatistics {
     }
 
     private void showStatistics() {
-        // Get the selected date from the spinner in 'MM/dd/yyyy' format
         Date selectedDate = (Date) dateSpinner.getValue();
-        
-        // Convert the selected date to the MySQL compatible 'yyyy-MM-dd' format
-        SimpleDateFormat mysqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String selectedDateString = mysqlDateFormat.format(selectedDate);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String selectedDateString = dateFormat.format(selectedDate);  // Format selected date to MM/dd/yyyy
 
         try {
             // Get a connection to the database
@@ -118,11 +115,11 @@ public class ViewStatistics {
             // Total Money Spent Query
             String totalMoneyQuery = "SELECT SUM(total_amount) AS total_money FROM Orders WHERE order_date = ?";
             PreparedStatement totalMoneyStatement = connection.prepareStatement(totalMoneyQuery);
-            totalMoneyStatement.setString(1, new SimpleDateFormat("MM/dd/yyyy").format(selectedDate));
+            totalMoneyStatement.setString(1, selectedDateString);
             ResultSet totalMoneyResult = totalMoneyStatement.executeQuery();
 
             double totalMoneySpent = 0.0;
-            if (totalMoneyResult.next()) {
+            if (totalMoneyResult.next() && totalMoneyResult.getString("total_money") != null) {
                 totalMoneySpent = totalMoneyResult.getDouble("total_money");
             }
             totalMoneySpentLabel.setText("Total Money Spent: $" + String.format("%.2f", totalMoneySpent));
@@ -130,11 +127,11 @@ public class ViewStatistics {
             // Average Money Spent Query
             String averageMoneyQuery = "SELECT AVG(total_amount) AS average_money FROM Orders WHERE order_date = ?";
             PreparedStatement averageMoneyStatement = connection.prepareStatement(averageMoneyQuery);
-            averageMoneyStatement.setString(1, new SimpleDateFormat("MM/dd/yyyy").format(selectedDate));
+            averageMoneyStatement.setString(1, selectedDateString);
             ResultSet averageMoneyResult = averageMoneyStatement.executeQuery();
-            
+
             double averageMoneySpent = 0.0;
-            if (averageMoneyResult.next()) {
+            if (averageMoneyResult.next() && averageMoneyResult.getString("average_money") != null) {
                 averageMoneySpent = averageMoneyResult.getDouble("average_money");
             }
             averageMoneySpentLabel.setText("Average Money Spent: $" + String.format("%.2f", averageMoneySpent));
@@ -142,7 +139,7 @@ public class ViewStatistics {
             // Total Number of Reservations Query
             String totalReservationsQuery = "SELECT COUNT(*) AS total_reservations FROM Reservations WHERE reservation_date = ?";
             PreparedStatement totalReservationsStatement = connection.prepareStatement(totalReservationsQuery);
-            totalReservationsStatement.setString(1, new SimpleDateFormat("MM/dd/yyyy").format(selectedDate));
+            totalReservationsStatement.setString(1, selectedDateString);
             ResultSet totalReservationsResult = totalReservationsStatement.executeQuery();
 
             int totalReservations = 0;
@@ -156,6 +153,7 @@ public class ViewStatistics {
             JOptionPane.showMessageDialog(frame, "An error occurred while fetching the statistics.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     public JFrame getFrame() {
         return frame;

@@ -148,12 +148,12 @@ public class EmployeeMenu {
 	
 	public void logoutButton() {
         JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(81, 215, 310, 29); // Adjust bounds as per your layout
+        logoutButton.setBounds(81, 215, 310, 29); 
         frame.getContentPane().add(logoutButton);
       
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0); // Exit the application
+                System.exit(0);
             }
         });
     }

@@ -22,7 +22,6 @@ public class ViewReviews {
     private JButton respondButton;
     private int selectedReviewId = -1;
 
-    // Map to store the review_id for each table row (hidden from the table itself)
     private Map<Integer, Integer> reviewIdMap = new HashMap<>();
 
     public static void main(String[] args) {
@@ -45,7 +44,7 @@ public class ViewReviews {
         frame = new JFrame("View Reviews");
         frame.setBounds(100, 100, 900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null); // Using absolute layout
+        frame.getContentPane().setLayout(null); 
 
         JLabel lblTitle = new JLabel("Customer Reviews");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -57,13 +56,12 @@ public class ViewReviews {
         scrollPane.setBounds(50, 70, 800, 250);
         frame.getContentPane().add(scrollPane);
 
-        // Define the table model without including review_id
         tableModel = new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"Customer ID", "Rating", "Title", "Description", "Date", "Response"}
         );
 
-        reviewsTable = new JTable(tableModel);  // Initialize reviewsTable here
+        reviewsTable = new JTable(tableModel);  
         reviewsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         scrollPane.setViewportView(reviewsTable);
 
@@ -83,7 +81,6 @@ public class ViewReviews {
         frame.getContentPane().add(respondButton);
         respondButton.addActionListener(e -> respondToReview());
 
-        // Back Button
         JButton backButton = new JButton("Back");
         backButton.setBounds(50, 500, 100, 30);
         frame.getContentPane().add(backButton);
@@ -95,9 +92,8 @@ public class ViewReviews {
 
         reviewsTable.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && reviewsTable.getSelectedRow() != -1) {
-                // Get the review_id from the map based on the selected row index
                 selectedReviewId = reviewIdMap.get(reviewsTable.getSelectedRow());
-                String response = (String) tableModel.getValueAt(reviewsTable.getSelectedRow(), 5); // Column 5 for response
+                String response = (String) tableModel.getValueAt(reviewsTable.getSelectedRow(), 5); 
                 responseArea.setText(response == null ? "" : response);
             }
         });
@@ -115,12 +111,12 @@ public class ViewReviews {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            tableModel.setRowCount(0); // Clear existing rows
-            reviewIdMap.clear(); // Clear existing mapping of review IDs
+            tableModel.setRowCount(0); 
+            reviewIdMap.clear(); 
 
             int rowIndex = 0;
             while (resultSet.next()) {
-                int reviewId = resultSet.getInt("review_id"); // Review ID
+                int reviewId = resultSet.getInt("review_id"); 
                 int customerId = resultSet.getInt("customer_id");
                 int rating = resultSet.getInt("review_rating");
                 String title = resultSet.getString("review_title");
@@ -128,10 +124,8 @@ public class ViewReviews {
                 String date = resultSet.getString("review_date");
                 String response = resultSet.getString("review_response");
 
-                // Add the visible columns to the table model (excluding review_id)
                 tableModel.addRow(new Object[]{customerId, rating, title, description, date, response});
 
-                // Store the review_id internally, associated with the row index
                 reviewIdMap.put(rowIndex, reviewId);
                 rowIndex++;
             }

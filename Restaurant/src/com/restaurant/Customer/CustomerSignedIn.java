@@ -43,7 +43,7 @@ public class CustomerSignedIn {
 	 */
 	public void initialize() {
 		frame = new JFrame("Customer Signed In");
-		frame.setBounds(100, 100, 800, 600);
+		frame.setBounds(100, 100, 600, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setLookAndFeel();
@@ -59,7 +59,7 @@ public class CustomerSignedIn {
 	    JLabel lblNewLabel = new JLabel("Welcome!");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(245, 17, 310, 16);
+		lblNewLabel.setBounds(146, 10, 310, 16);
 		frame.getContentPane().add(lblNewLabel);
 
 	}
@@ -67,8 +67,9 @@ public class CustomerSignedIn {
 	
 	
 	public void orderOnlineButton() {
+        frame.getContentPane().setLayout(null);
         JButton orderOnlineButton = new JButton("Order Online");
-        orderOnlineButton.setBounds(250, 249, 310, 29); 
+        orderOnlineButton.setBounds(145, 59, 310, 29); 
         frame.getContentPane().add(orderOnlineButton);
         orderOnlineButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -85,7 +86,7 @@ public class CustomerSignedIn {
     
     public void makeReservationButton() {
         JButton makeReservationButton = new JButton("Make a Reservation");
-        makeReservationButton.setBounds(250, 289, 310, 29); 
+        makeReservationButton.setBounds(145, 100, 310, 29); 
         frame.getContentPane().add(makeReservationButton);
         makeReservationButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -102,7 +103,7 @@ public class CustomerSignedIn {
 
     public void viewHistoryButton() {
         JButton viewHistoryButton = new JButton("View History");
-        viewHistoryButton.setBounds(250, 329, 310, 29); 
+        viewHistoryButton.setBounds(145, 141, 310, 29); 
         frame.getContentPane().add(viewHistoryButton);
         viewHistoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +120,7 @@ public class CustomerSignedIn {
 
     public void purchaseGiftCardButton() {
         JButton purchaseGiftCardButton = new JButton("Purchase Gift Card");
-        purchaseGiftCardButton.setBounds(250, 369, 310, 29); 
+        purchaseGiftCardButton.setBounds(145, 182, 310, 29); 
         frame.getContentPane().add(purchaseGiftCardButton);
         purchaseGiftCardButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -136,7 +137,7 @@ public class CustomerSignedIn {
 
     public void leaveAReviewButton() {
         JButton leaveAReviewButton = new JButton("Leave a Review");
-        leaveAReviewButton.setBounds(250, 409, 310, 29);
+        leaveAReviewButton.setBounds(145, 223, 310, 29);
         frame.getContentPane().add(leaveAReviewButton);
         leaveAReviewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -153,7 +154,7 @@ public class CustomerSignedIn {
     
     public void accountSettingsButton() {
         JButton accountSettingsButton = new JButton("Account Settings");
-        accountSettingsButton.setBounds(250, 409, 310, 29);
+        accountSettingsButton.setBounds(145, 264, 310, 29);
         frame.getContentPane().add(accountSettingsButton);
         accountSettingsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -170,7 +171,7 @@ public class CustomerSignedIn {
     
     public void logoutButton() {
         JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(250, 449, 310, 29); // Adjust bounds as per your layout
+        logoutButton.setBounds(145, 305, 310, 29); // Adjust bounds as per your layout
         frame.getContentPane().add(logoutButton);
      
         logoutButton.addActionListener(new ActionListener() {

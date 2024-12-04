@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -92,15 +93,32 @@ public class PurchaseGiftCard {
             return;
         }
 
+        if (recipientUsername.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Please enter the recipient's username.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             double amount = Double.parseDouble(amountText);
-            int customerId = UserSession.getInstance().getCustomerId(); 
-            String cardCode = generateGiftCardCode(); 
+            int customerId = UserSession.getInstance().getCustomerId();
+            String cardCode = generateGiftCardCode();
             String purchasedDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 
             Connection connection = Database.getConnection();
             if (connection == null) {
                 throw new SQLException("Database connection failed.");
+            }
+
+            String checkUserQuery = "SELECT COUNT(*) FROM Customers WHERE customer_username = ?";
+            PreparedStatement checkUserStatement = connection.prepareStatement(checkUserQuery);
+            checkUserStatement.setString(1, recipientUsername);
+            ResultSet userResult = checkUserStatement.executeQuery();
+            userResult.next();
+            int userCount = userResult.getInt(1);
+
+            if (userCount == 0) {
+                JOptionPane.showMessageDialog(frame, "Recipient username does not exist. Please enter a valid username.", "Invalid Recipient", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
             String query = "INSERT INTO GiftCards (card_code, customer_id, amount, status, purchased_date, recipient_username) VALUES (?, ?, ?, 'Active', ?, ?)";
@@ -126,6 +144,7 @@ public class PurchaseGiftCard {
             JOptionPane.showMessageDialog(frame, "An error occurred while purchasing the gift card. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private String generateGiftCardCode() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

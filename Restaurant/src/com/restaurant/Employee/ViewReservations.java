@@ -34,7 +34,7 @@ public class ViewReservations {
 
     public ViewReservations() {
         initialize();
-        loadReservationsForDate(new Date()); // Load today's reservations by default
+        loadReservationsForDate(new Date());
     }
 
     public void initialize() {
@@ -61,23 +61,19 @@ public class ViewReservations {
         reservationsTable.setModel(tableModel);
         scrollPane.setViewportView(reservationsTable);
 
-        // Date Spinner for selecting reservation date
         JLabel dateLabel = new JLabel("Select Date:");
         dateLabel.setBounds(309, 73, 100, 25);
         frame.getContentPane().add(dateLabel);
 
-        // Date spinner that changes days specifically when arrows are pressed
         dateSpinner = new JSpinner(new SpinnerDateModel());
         dateSpinner.setBounds(387, 72, 150, 25);
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "MM/dd/yyyy");
         dateSpinner.setEditor(dateEditor);
 
-        // Set the calendar to increment/decrement by day
         ((SpinnerDateModel) dateSpinner.getModel()).setCalendarField(Calendar.DAY_OF_MONTH);
 
         frame.getContentPane().add(dateSpinner);
 
-        // Show Reservations Button
         showReservationsButton = new JButton("Show Reservations");
         showReservationsButton.setBounds(542, 74, 150, 25);
         frame.getContentPane().add(showReservationsButton);
@@ -122,7 +118,7 @@ public class ViewReservations {
             statement.setString(1, formattedDate);
             ResultSet resultSet = statement.executeQuery();
 
-            tableModel.setRowCount(0); // Clear existing rows
+            tableModel.setRowCount(0); 
             while (resultSet.next()) {
                 int reservationId = resultSet.getInt("reservation_id");
                 int customerId = resultSet.getInt("customer_id");
@@ -162,7 +158,7 @@ public class ViewReservations {
 
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(frame, "Reservation marked as present.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadReservationsForDate((Date) dateSpinner.getValue()); // Reload reservations for the selected date
+                loadReservationsForDate((Date) dateSpinner.getValue()); 
             }
 
         } catch (SQLException e) {
@@ -187,7 +183,6 @@ public class ViewReservations {
                 return;
             }
 
-            // Update the status of the reservation to "Canceled" instead of deleting it
             String updateQuery = "UPDATE Reservations SET reservation_status = 'Canceled' WHERE reservation_id = ?";
             PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setInt(1, reservationId);
@@ -195,7 +190,7 @@ public class ViewReservations {
 
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(frame, "Reservation canceled successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadReservationsForDate((Date) dateSpinner.getValue()); // Reload reservations for the selected date
+                loadReservationsForDate((Date) dateSpinner.getValue());
             }
 
         } catch (SQLException e) {

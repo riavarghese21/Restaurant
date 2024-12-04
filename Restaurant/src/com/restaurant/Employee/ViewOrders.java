@@ -105,7 +105,7 @@ public class ViewOrders {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            tableModel.setRowCount(0); // Clear existing rows
+            tableModel.setRowCount(0);
             while (resultSet.next()) {
                 int orderId = resultSet.getInt("order_id");
                 int customerId = resultSet.getInt("customer_id");
@@ -171,7 +171,6 @@ public class ViewOrders {
                 return;
             }
 
-            // Update the order status to "Canceled" instead of deleting it
             String updateQuery = "UPDATE Orders SET order_status = 'Canceled' WHERE order_id = ?";
             PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setInt(1, orderId);

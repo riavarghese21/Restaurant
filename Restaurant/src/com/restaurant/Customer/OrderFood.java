@@ -68,7 +68,7 @@ public class OrderFood {
         model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
+                return false; 
             }
         };
         table = new JTable(model);
@@ -92,7 +92,7 @@ public class OrderFood {
         ItemNameTextField.setBounds(525, 151, 214, 26);
         frame.getContentPane().add(ItemNameTextField);
         ItemNameTextField.setColumns(10);
-        ItemNameTextField.setEditable(false); // Make the item name field non-editable
+        ItemNameTextField.setEditable(false);
 
         // Price Field
         JLabel PriceLabel = new JLabel("Price");
@@ -104,9 +104,8 @@ public class OrderFood {
         PriceTextField.setBounds(525, 213, 213, 26);
         frame.getContentPane().add(PriceTextField);
         PriceTextField.setColumns(10);
-        PriceTextField.setEditable(false); // Make the price field non-editable
+        PriceTextField.setEditable(false);  
 
-        // Quantity
         JLabel QuantityLabel = new JLabel("Quantity");
         QuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
         QuantityLabel.setBounds(600, 258, 61, 16);
@@ -143,7 +142,7 @@ public class OrderFood {
         TotalTextField.setBounds(525, 352, 213, 26);
         frame.getContentPane().add(TotalTextField);
         TotalTextField.setColumns(10);
-        TotalTextField.setEditable(false); // Make the total field non-editable
+        TotalTextField.setEditable(false); 
 
         // Add to Cart
         JButton AddToCartButton = new JButton("Add to Cart");
@@ -202,7 +201,6 @@ public class OrderFood {
             frame.setVisible(false);
         });
 
-        // Table selection listener
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {

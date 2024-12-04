@@ -92,12 +92,12 @@ public class CustomerReview {
         reviewDescription.setLineWrap(true);
 
         JButton btnSubmitReview = new JButton("Submit Review");
-        btnSubmitReview.setBounds(618, 500, 150, 30);
+        btnSubmitReview.setBounds(346, 500, 150, 30);
         frame.getContentPane().add(btnSubmitReview);
 
         // Back Button
         JButton backButton = new JButton("Back");
-        backButton.setBounds(50, 500, 100, 30);
+        backButton.setBounds(30, 522, 100, 30);
         frame.getContentPane().add(backButton);
 
         backButton.addActionListener(e -> {
