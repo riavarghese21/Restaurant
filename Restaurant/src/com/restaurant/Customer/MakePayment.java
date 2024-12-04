@@ -3,6 +3,8 @@ package com.restaurant.Customer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.Database;
+import com.restaurant.Encryption;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -41,7 +43,7 @@ public class MakePayment {
     }
 
     private void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("Make Payment");
         frame.setBounds(100, 100, 800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -55,7 +57,7 @@ public class MakePayment {
 
         // Back Button
         JButton BackButton = new JButton("Back");
-        BackButton.setBounds(78, 503, 117, 29);
+        BackButton.setBounds(30, 526, 80, 25);
         frame.getContentPane().add(BackButton);
         BackButton.addActionListener(e -> {
             frame.dispose();
@@ -65,7 +67,7 @@ public class MakePayment {
 
         // Place Order Button
         JButton PlaceOrderButton = new JButton("Place Order");
-        PlaceOrderButton.setBounds(598, 503, 117, 29);
+        PlaceOrderButton.setBounds(510, 466, 117, 29);
         frame.getContentPane().add(PlaceOrderButton);
 
         // Gift Card Code Field
@@ -175,7 +177,7 @@ public class MakePayment {
         frame.getContentPane().add(StateComboBox);
 
         StoreButton = new JButton("Save Card");
-        StoreButton.setBounds(347, 466, 117, 29);
+        StoreButton.setBounds(213, 466, 117, 29);
         frame.getContentPane().add(StoreButton);
 
         ExpirationLabel = new JLabel("Expiration:");
@@ -184,22 +186,38 @@ public class MakePayment {
 
         StoreButton.addActionListener(e -> savePaymentInfo());
 
+        // Load Saved Card Button
+        JButton loadSavedCardButton = new JButton("Load Saved Card");
+        loadSavedCardButton.setBounds(360, 466, 117, 29);
+        frame.getContentPane().add(loadSavedCardButton);
+        loadSavedCardButton.addActionListener(e -> loadSavedPaymentInfo());
+
         // Place Order Button
         PlaceOrderButton.addActionListener(e -> {
-            if (isPaymentMade) {
-                double finalAmount = orderTotalAmount - appliedGiftCardValue;
-                if (finalAmount <= 0) {
-                    JOptionPane.showMessageDialog(frame, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    frame.dispose();
-                } else {
-                    processOrder(finalAmount);
-                }
+            double finalAmount = orderTotalAmount - appliedGiftCardValue;
+
+            // Ensure the final amount is properly validated
+            if (finalAmount > 0 && !isPaymentMade) {
+                // If there's a remaining amount and no saved payment information, show an error
+                JOptionPane.showMessageDialog(frame, "Please save credit card information before placing the order. Gift card does not cover the full amount.", "Payment Required", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (finalAmount <= 0) {
+                // If the gift card fully covers the payment, place the order
+                processOrder(0);
+            } else if (finalAmount > 0 && isPaymentMade) {
+                // If there is a remaining balance and credit card details are saved, place the order
+                processOrder(finalAmount);
             } else {
-                JOptionPane.showMessageDialog(frame, "Please apply a gift card or save credit card information before placing the order.", "Payment Required", JOptionPane.ERROR_MESSAGE);
+                // This is a fallback case, which should not happen if logic is correct
+                JOptionPane.showMessageDialog(frame, "Unexpected payment error. Please review the payment information.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-    }
 
+        
+    }
+    
     private void savePaymentInfo() {
         try {
             Connection connection = Database.getConnection();
@@ -221,37 +239,91 @@ public class MakePayment {
             String expirationYear = ExpirationYearComboBox.getSelectedItem() != null ? ExpirationYearComboBox.getSelectedItem().toString() : "";
             int customerId = getCurrentCustomerId();
 
+            // Validate input
             if (cardType.equals("Card Type") || state.equals("State") || expirationMonth.equals("Month") || expirationYear.isEmpty()
-                || cardNumber.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || cvv.isEmpty() || billingAddress.isEmpty() || city.isEmpty() || zipCode.isEmpty()) {
+                    || cardNumber.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || cvv.isEmpty() || billingAddress.isEmpty() || city.isEmpty() || zipCode.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Please fill in all card details.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            // Encrypt sensitive fields
+            cardNumber = Encryption.encrypt(cardNumber);
+            cvv = Encryption.encrypt(cvv);
+            expirationMonth = Encryption.encrypt(expirationMonth);
+            expirationYear = !expirationYear.isEmpty() ? Encryption.encrypt(expirationYear) : "";
+
+            // Insert statement should use VARCHAR types for encrypted fields in your database schema
             String insertPaymentInfoQuery = "INSERT INTO PaymentInfo (customer_id, card_type, card_number, expiration_month, expiration_year, first_name, last_name, cvv, billing_address, city, state, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement paymentStatement = connection.prepareStatement(insertPaymentInfoQuery);
             paymentStatement.setInt(1, customerId);
             paymentStatement.setString(2, cardType);
-            paymentStatement.setString(3, cardNumber);
-            paymentStatement.setInt(4, Integer.parseInt(expirationMonth));
-            paymentStatement.setInt(5, Integer.parseInt(expirationYear));
+            paymentStatement.setString(3, cardNumber);  // Encrypted card number
+            paymentStatement.setString(4, expirationMonth);  // Encrypted expiration month
+            paymentStatement.setString(5, expirationYear);  // Encrypted expiration year
             paymentStatement.setString(6, firstName);
             paymentStatement.setString(7, lastName);
-            paymentStatement.setInt(8, Integer.parseInt(cvv));
+            paymentStatement.setString(8, cvv);  // Encrypted CVV
             paymentStatement.setString(9, billingAddress);
             paymentStatement.setString(10, city);
             paymentStatement.setString(11, state);
-            paymentStatement.setInt(12, Integer.parseInt(zipCode));
+            paymentStatement.setString(12, zipCode);
 
-            paymentStatement.executeUpdate();
+            int rowsInserted = paymentStatement.executeUpdate();
 
-            JOptionPane.showMessageDialog(frame, "Payment information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            isPaymentMade = true;
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(frame, "Payment information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                isPaymentMade = true;
+            } else {
+                JOptionPane.showMessageDialog(frame, "Failed to save payment information. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(frame, "An error occurred while saving payment information. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Invalid number format. Please check your inputs.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private void loadSavedPaymentInfo() {
+        try {
+            Connection connection = Database.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int customerId = getCurrentCustomerId();
+            String selectPaymentInfoQuery = "SELECT card_type, card_number, expiration_month, expiration_year, first_name, last_name, cvv, billing_address, city, state, zip_code FROM PaymentInfo WHERE customer_id = ?";
+            PreparedStatement paymentStatement = connection.prepareStatement(selectPaymentInfoQuery);
+            paymentStatement.setInt(1, customerId);
+            ResultSet resultSet = paymentStatement.executeQuery();
+
+            if (resultSet.next()) {
+                // Set the UI elements with values from the database
+                CardType.setSelectedItem(resultSet.getString("card_type"));
+                CardNumber.setText(resultSet.getString("card_number"));
+                ExpirationMonthComboBox.setSelectedItem(String.valueOf(resultSet.getInt("expiration_month")));
+                ExpirationYearComboBox.setSelectedItem(resultSet.getInt("expiration_year"));
+                FirstName.setText(resultSet.getString("first_name"));
+                LastName.setText(resultSet.getString("last_name"));
+                CVV.setText(String.valueOf(resultSet.getInt("cvv")));
+                BillingAddress.setText(resultSet.getString("billing_address"));
+                City.setText(resultSet.getString("city"));
+                StateComboBox.setSelectedItem(resultSet.getString("state"));
+                ZipCode.setText(resultSet.getString("zip_code"));
+
+                JOptionPane.showMessageDialog(frame, "Payment information loaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                isPaymentMade = true;  // Mark payment as made when loading card details
+            } else {
+                JOptionPane.showMessageDialog(frame, "No saved card found for this user.", "No Card Found", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "An error occurred while loading payment information. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -266,7 +338,7 @@ public class MakePayment {
         try {
             Connection connection = Database.getConnection();
             int customerId = getCurrentCustomerId();
-            String query = "SELECT amount FROM GiftCards WHERE card_code = ? AND status = 'Active' AND customer_id = ?";
+            String query = "SELECT amount FROM GiftCards WHERE card_code = ? AND status = 'Active' AND recipient_username = (SELECT customer_username FROM Customers WHERE customer_id = ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, giftCardCode);
             preparedStatement.setInt(2, customerId);
@@ -308,8 +380,6 @@ public class MakePayment {
             e.printStackTrace();
         }
     }
-
-
 
 
     private double calculateTotalFromCart() {

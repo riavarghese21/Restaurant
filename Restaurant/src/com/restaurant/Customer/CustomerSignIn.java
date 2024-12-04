@@ -2,6 +2,8 @@ package com.restaurant.Customer;
 
 import javax.swing.*;
 import com.restaurant.Database;
+import com.restaurant.SignInPage;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,13 +43,13 @@ public class CustomerSignIn {
      * Initialize the contents of the frame.
      */
     public void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("Customer Sign In");
         frame.setBounds(100, 100, 400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
         JLabel loginLabel = new JLabel("Customer Login");
-        loginLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+        loginLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
         loginLabel.setBounds(125, 20, 150, 30);
         frame.getContentPane().add(loginLabel);
 
@@ -69,7 +71,6 @@ public class CustomerSignIn {
         frame.getContentPane().add(passwordField);
         passwordField.setColumns(10);
 
-        // Login Button
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(175, 174, 100, 30);
         frame.getContentPane().add(loginButton);
@@ -83,28 +84,26 @@ public class CustomerSignIn {
         JButton backButton = new JButton("Back");
         backButton.setBounds(50, 220, 80, 25);
         frame.getContentPane().add(backButton);
-        
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToSignInPage();
+            }
+        });
+
         JButton createAccountButton = new JButton("Create Account");
         createAccountButton.setBounds(173, 202, 121, 30);
         frame.getContentPane().add(createAccountButton);
-        
-        //View Cart
-        JButton CreateAccount = new JButton("View Cart");
-        CreateAccount.setBounds(468, 515, 117, 29);
-        frame.getContentPane().add(CreateAccount);
-
-        
-        JButton createAccountButton1 = new JButton("Create Account");
-        createAccountButton1.setBounds(173, 202, 121, 30);
-        frame.getContentPane().add(createAccountButton1);
-        
-        createAccountButton1.addActionListener(new ActionListener() {
+        createAccountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 goToCreateAccountPage();
             }
-            
         });
+    }
 
+    private void goToSignInPage() {
+        frame.dispose();
+        SignInPage signInPage = new SignInPage();
+        signInPage.setVisible(true);
     }
     
 

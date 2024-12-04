@@ -36,7 +36,7 @@ public class ViewOrders {
     }
 
     public void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("View Orders");
         frame.setBounds(100, 100, 900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -111,8 +111,9 @@ public class ViewOrders {
                 int customerId = resultSet.getInt("customer_id");
                 String orderDate = resultSet.getString("order_date");
                 double totalAmount = resultSet.getDouble("total_amount");
+                String formattedTotalAmount = String.format("%.2f", totalAmount);
                 String status = resultSet.getString("order_status");
-                tableModel.addRow(new Object[]{orderId, customerId, orderDate, totalAmount, status});
+                tableModel.addRow(new Object[]{orderId, customerId, orderDate, formattedTotalAmount, status});
             }
 
         } catch (SQLException e) {
@@ -170,13 +171,14 @@ public class ViewOrders {
                 return;
             }
 
-            String deleteQuery = "DELETE FROM Orders WHERE order_id = ?";
-            PreparedStatement statement = connection.prepareStatement(deleteQuery);
+            // Update the order status to "Canceled" instead of deleting it
+            String updateQuery = "UPDATE Orders SET order_status = 'Canceled' WHERE order_id = ?";
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setInt(1, orderId);
-            int rowsDeleted = statement.executeUpdate();
+            int rowsUpdated = statement.executeUpdate();
 
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(frame, "Order canceled.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(frame, "Order canceled successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadOrders(showAllCheckBox.isSelected());
             }
 
@@ -185,6 +187,7 @@ public class ViewOrders {
             e.printStackTrace();
         }
     }
+
 
     public JFrame getFrame() {
         return frame;

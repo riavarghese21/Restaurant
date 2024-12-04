@@ -11,9 +11,12 @@ import javax.swing.UIManager;
 
 import com.restaurant.Database;
 import com.restaurant.Encryption;
+import com.restaurant.SignInPage;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class CreateCustomerAccount {
 
@@ -52,7 +55,7 @@ public class CreateCustomerAccount {
 	 */
 	public void initialize() {
 		frame = new JFrame("Create New Account");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 600, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -61,52 +64,75 @@ public class CreateCustomerAccount {
 		setupClosingDBConnection();
 		
 		usernameTF = new JTextField();
-		usernameTF.setBounds(72, 32, 310, 20);
+		usernameTF.setBounds(145, 85, 310, 20);
 		frame.getContentPane().add(usernameTF);
 		usernameTF.setColumns(10);
 		
 		pswdTF = new JTextField();
-		pswdTF.setBounds(72, 88, 310, 20);
+		pswdTF.setBounds(145, 138, 310, 20);
 		frame.getContentPane().add(pswdTF);
 		pswdTF.setColumns(10);
 		
 		fullNameTF = new JTextField("");
-		fullNameTF.setBounds(72, 144, 310, 20);
+		fullNameTF.setBounds(145, 196, 310, 20);
 		frame.getContentPane().add(fullNameTF);
 		fullNameTF.setColumns(10);
 		
 		addressTF = new JTextField();
-		addressTF.setBounds(72, 196, 310, 20);
+		addressTF.setBounds(145, 254, 310, 20);
 		frame.getContentPane().add(addressTF);
 		addressTF.setColumns(10);
 		
 		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(72, 11, 310, 14);
+		usernameLBL.setBounds(145, 59, 310, 14);
 		frame.getContentPane().add(usernameLBL);
 		
 		JLabel pswdLBL = new JLabel("Password");
-		pswdLBL.setBounds(72, 63, 310, 14);
+		pswdLBL.setBounds(145, 112, 310, 14);
 		frame.getContentPane().add(pswdLBL);
 		
 		JLabel fullNameLBL = new JLabel("Full Name");
-		fullNameLBL.setBounds(72, 119, 310, 14);
+		fullNameLBL.setBounds(145, 170, 310, 14);
 		frame.getContentPane().add(fullNameLBL);
 		
 		JLabel addressLBL = new JLabel("Address");
-		addressLBL.setBounds(72, 171, 310, 14);
+		addressLBL.setBounds(145, 228, 310, 14);
 		frame.getContentPane().add(addressLBL);
+		
+		JLabel lblNewLabel = new JLabel("Create an Account");
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(145, 10, 310, 16);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JButton backButton = new JButton("Back");
+        backButton.setBounds(30, 330, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToCustomerSignIn1();
+            }
+        });
 		
 		newCustomerButton();
 	}
 	
+	private void goToCustomerSignIn1() {
+        frame.dispose();
+        CustomerSignIn customerSignIn = new CustomerSignIn();
+        customerSignIn.setVisible(true);
+    }
+    
+	
 	public void newCustomerButton() {
-		JButton newCustomerButton = new JButton("Create new Customer Account");
-		newCustomerButton.setBounds(72, 221, 310, 29);
+		JButton newCustomerButton = new JButton("Create New Customer Account");
+		newCustomerButton.setBounds(145, 295, 310, 29);
 		frame.getContentPane().add(newCustomerButton);
+		
 		newCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addNewCustomer();
-				goToCustomerSignIn();
+				goToCustomerSignIn1();
 			}
 		});
 	}

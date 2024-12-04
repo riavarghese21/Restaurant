@@ -67,7 +67,7 @@ public class Cart {
      * Initialize the contents of the frame.
      */
     public void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("View Cart");
         frame.setBounds(100, 100, 800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -151,7 +151,7 @@ public class Cart {
 
         // Go to Payment Button
         GoToPaymentButton = new JButton("Go to Payment");
-        GoToPaymentButton.setBounds(503, 501, 117, 29);
+        GoToPaymentButton.setBounds(367, 500, 117, 29);
         frame.getContentPane().add(GoToPaymentButton);
 
         GoToPaymentButton.addActionListener(new ActionListener() {
@@ -166,12 +166,12 @@ public class Cart {
         // Title
         ViewCartLabel = new JLabel("View Cart");
         ViewCartLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-        ViewCartLabel.setBounds(377, 16, 88, 16);
+        ViewCartLabel.setBounds(367, 16, 88, 16);
         frame.getContentPane().add(ViewCartLabel);
 
         // Back Button
         BackButton = new JButton("Back");
-        BackButton.setBounds(198, 501, 117, 29);
+        BackButton.setBounds(30, 523, 80, 25);
         frame.getContentPane().add(BackButton);
 
         BackButton.addActionListener(new ActionListener() {

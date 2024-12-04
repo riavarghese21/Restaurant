@@ -1,125 +1,108 @@
 package com.restaurant.Employee;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import com.restaurant.Database;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.restaurant.Database;
-import java.awt.Font;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewReviews {
 
-    private JFrame frame;
-    private JList<String> reviewList;
+    public JFrame frame;
+    private JTable reviewsTable;
+    private DefaultTableModel tableModel;
     private JTextArea responseArea;
-    private DefaultListModel<String> reviewListModel;
-    private int selectedReviewId = -1; // To keep track of selected review's ID
+    private JButton respondButton;
+    private int selectedReviewId = -1;
 
-    /**
-     * Launch the application.
-     */
+    // Map to store the review_id for each table row (hidden from the table itself)
+    private Map<Integer, Integer> reviewIdMap = new HashMap<>();
+
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
                 ViewReviews window = new ViewReviews();
-                window.getFrame().setVisible(true);
+                window.frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
-    /**
-     * Create the application.
-     */
     public ViewReviews() {
         initialize();
+        loadReviews();
     }
 
-    /**
-     * Initialize the contents of the frame using Absolute Layout.
-     */
-    private void initialize() {
-        frame = new JFrame("Respond to Reviews");
-        frame.setTitle("");
-        frame.setBounds(100, 100, 600, 500);
+    public void initialize() {
+        frame = new JFrame("View Reviews");
+        frame.setBounds(100, 100, 900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null); // Using absolute layout
 
-        // Review List
-        reviewListModel = new DefaultListModel<>();
-        frame.getContentPane().setLayout(null);
-        JScrollPane listScrollPane = new JScrollPane();
-        listScrollPane.setBounds(35, 68, 530, 130);
-        frame.getContentPane().add(listScrollPane);
-        reviewList = new JList<>(reviewListModel);
-        listScrollPane.setViewportView(reviewList);
-        reviewList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        reviewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-                // List selection listener to load selected review
-                reviewList.addListSelectionListener(new ListSelectionListener() {
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        if (!e.getValueIsAdjusting() && reviewList.getSelectedIndex() != -1) {
-                            loadSelectedReviewResponse();
-                        }
-                    }
-                });
-        JScrollPane responseScrollPane = new JScrollPane();
-        responseScrollPane.setBounds(35, 221, 530, 106);
+        JLabel lblTitle = new JLabel("Customer Reviews");
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 17));
+        lblTitle.setBounds(370, 20, 200, 30);
+        frame.getContentPane().add(lblTitle);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(50, 70, 800, 250);
+        frame.getContentPane().add(scrollPane);
+
+        // Define the table model without including review_id
+        tableModel = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Customer ID", "Rating", "Title", "Description", "Date", "Response"}
+        );
+
+        reviewsTable = new JTable(tableModel);  // Initialize reviewsTable here
+        reviewsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        scrollPane.setViewportView(reviewsTable);
+
+        JLabel lblResponse = new JLabel("Write Response:");
+        lblResponse.setBounds(50, 350, 150, 20);
+        frame.getContentPane().add(lblResponse);
+
+        responseArea = new JTextArea();
+        responseArea.setWrapStyleWord(true);
+        responseArea.setLineWrap(true);
+        JScrollPane responseScrollPane = new JScrollPane(responseArea);
+        responseScrollPane.setBounds(50, 380, 800, 100);
         frame.getContentPane().add(responseScrollPane);
-        
-                // Response Text Area
-                responseArea = new JTextArea();
-                responseScrollPane.setColumnHeaderView(responseArea);
-                responseArea.setWrapStyleWord(true);
-                responseArea.setLineWrap(true);
 
-        // Button to Save Response
-        JButton saveResponseButton = new JButton("Save Response");
-        saveResponseButton.setBounds(242, 370, 150, 30);
-        frame.getContentPane().add(saveResponseButton);
+        respondButton = new JButton("Respond to Review");
+        respondButton.setBounds(375, 500, 150, 30);
+        frame.getContentPane().add(respondButton);
+        respondButton.addActionListener(e -> respondToReview());
 
         // Back Button
         JButton backButton = new JButton("Back");
-        backButton.setBounds(19, 424, 100, 30);
+        backButton.setBounds(50, 500, 100, 30);
         frame.getContentPane().add(backButton);
-                
-                JLabel viewReviewsLabel = new JLabel("View Reviews");
-                viewReviewsLabel.setBounds(242, 11, 124, 15);
-                viewReviewsLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-                viewReviewsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                frame.getContentPane().add(viewReviewsLabel);
-
         backButton.addActionListener(e -> {
             frame.dispose();
             EmployeeMenu employeeMenu = new EmployeeMenu();
             employeeMenu.setVisible(true);
         });
 
-        // Load reviews into list
-        loadReviews();
-
-        // Save response button action listener
-        saveResponseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveReviewResponse();
+        reviewsTable.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && reviewsTable.getSelectedRow() != -1) {
+                // Get the review_id from the map based on the selected row index
+                selectedReviewId = reviewIdMap.get(reviewsTable.getSelectedRow());
+                String response = (String) tableModel.getValueAt(reviewsTable.getSelectedRow(), 5); // Column 5 for response
+                responseArea.setText(response == null ? "" : response);
             }
         });
     }
 
-    /**
-     * Load reviews from the database into the review list.
-     */
     private void loadReviews() {
         try {
             Connection connection = Database.getConnection();
@@ -128,69 +111,46 @@ public class ViewReviews {
                 return;
             }
 
-            String query = "SELECT review_id, review_title FROM Reviews WHERE review_response IS NULL OR review_response = ''";
+            String query = "SELECT * FROM Reviews";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            reviewListModel.clear();
+            tableModel.setRowCount(0); // Clear existing rows
+            reviewIdMap.clear(); // Clear existing mapping of review IDs
+
+            int rowIndex = 0;
             while (resultSet.next()) {
-                int reviewId = resultSet.getInt("review_id");
-                String reviewTitle = resultSet.getString("review_title");
-                reviewListModel.addElement("Review #" + reviewId + ": " + reviewTitle);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error loading reviews from the database.", "Database Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    /**
-     * Load the selected review response for editing.
-     */
-    private void loadSelectedReviewResponse() {
-        try {
-            String selectedValue = reviewList.getSelectedValue();
-            if (selectedValue == null) return;
-
-            // Extracting review ID from the selected value text
-            String[] parts = selectedValue.split(":");
-            selectedReviewId = Integer.parseInt(parts[0].replace("Review #", "").trim());
-
-            Connection connection = Database.getConnection();
-            if (connection == null) {
-                JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String query = "SELECT review_response FROM Reviews WHERE review_id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, selectedReviewId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
+                int reviewId = resultSet.getInt("review_id"); // Review ID
+                int customerId = resultSet.getInt("customer_id");
+                int rating = resultSet.getInt("review_rating");
+                String title = resultSet.getString("review_title");
+                String description = resultSet.getString("review_description");
+                String date = resultSet.getString("review_date");
                 String response = resultSet.getString("review_response");
-                responseArea.setText(response != null ? response : "");
+
+                // Add the visible columns to the table model (excluding review_id)
+                tableModel.addRow(new Object[]{customerId, rating, title, description, date, response});
+
+                // Store the review_id internally, associated with the row index
+                reviewIdMap.put(rowIndex, reviewId);
+                rowIndex++;
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "An error occurred while loading reviews.", "Database Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error loading the selected review response.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /**
-     * Save the response to the selected review.
-     */
-    private void saveReviewResponse() {
+    private void respondToReview() {
         if (selectedReviewId == -1) {
-            JOptionPane.showMessageDialog(frame, "Please select a review to respond to.", "No Review Selected", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Please select a review to respond to.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String responseText = responseArea.getText().trim();
         if (responseText.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Response text cannot be empty.", "Invalid Response", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Please enter a response.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -205,27 +165,19 @@ public class ViewReviews {
             PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setString(1, responseText);
             statement.setInt(2, selectedReviewId);
-
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(frame, "Response saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Response saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadReviews();
-                responseArea.setText("");
-                selectedReviewId = -1; // Reset selection
-            } else {
-                JOptionPane.showMessageDialog(frame, "Failed to save response. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(frame, "An error occurred while saving the response.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Getter method for frame.
-     */
     public JFrame getFrame() {
         return frame;
     }

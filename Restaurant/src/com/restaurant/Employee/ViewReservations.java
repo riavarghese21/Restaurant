@@ -3,8 +3,6 @@ package com.restaurant.Employee;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.Database;
-import com.restaurant.Customer.CustomerSignedIn;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -12,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ViewReservations {
@@ -19,7 +18,8 @@ public class ViewReservations {
     public JFrame frame;
     private JTable reservationsTable;
     private DefaultTableModel tableModel;
-    private JButton markPresentButton, cancelReservationButton;
+    private JButton markPresentButton, cancelReservationButton, showReservationsButton;
+    private JSpinner dateSpinner;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -34,23 +34,23 @@ public class ViewReservations {
 
     public ViewReservations() {
         initialize();
-        loadTodayReservations();
+        loadReservationsForDate(new Date()); // Load today's reservations by default
     }
 
     public void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("View Reservations");
         frame.setBounds(100, 100, 900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        JLabel lblTitle = new JLabel("Today's Reservations");
+        JLabel lblTitle = new JLabel("View Reservations");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 17));
         lblTitle.setBounds(370, 20, 200, 30);
         frame.getContentPane().add(lblTitle);
 
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(50, 70, 800, 350);
+        scrollPane.setBounds(50, 110, 800, 310);
         frame.getContentPane().add(scrollPane);
 
         reservationsTable = new JTable();
@@ -61,29 +61,54 @@ public class ViewReservations {
         reservationsTable.setModel(tableModel);
         scrollPane.setViewportView(reservationsTable);
 
+        // Date Spinner for selecting reservation date
+        JLabel dateLabel = new JLabel("Select Date:");
+        dateLabel.setBounds(309, 73, 100, 25);
+        frame.getContentPane().add(dateLabel);
+
+        // Date spinner that changes days specifically when arrows are pressed
+        dateSpinner = new JSpinner(new SpinnerDateModel());
+        dateSpinner.setBounds(387, 72, 150, 25);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "MM/dd/yyyy");
+        dateSpinner.setEditor(dateEditor);
+
+        // Set the calendar to increment/decrement by day
+        ((SpinnerDateModel) dateSpinner.getModel()).setCalendarField(Calendar.DAY_OF_MONTH);
+
+        frame.getContentPane().add(dateSpinner);
+
+        // Show Reservations Button
+        showReservationsButton = new JButton("Show Reservations");
+        showReservationsButton.setBounds(542, 74, 150, 25);
+        frame.getContentPane().add(showReservationsButton);
+        showReservationsButton.addActionListener(e -> {
+            Date selectedDate = (Date) dateSpinner.getValue();
+            loadReservationsForDate(selectedDate);
+        });
+
         markPresentButton = new JButton("Mark as Present");
-        markPresentButton.setBounds(228, 450, 150, 30);
+        markPresentButton.setBounds(295, 450, 150, 30);
         frame.getContentPane().add(markPresentButton);
         markPresentButton.addActionListener(e -> markReservationAsPresent());
 
         cancelReservationButton = new JButton("Cancel Reservation");
-        cancelReservationButton.setBounds(390, 450, 180, 30);
+        cancelReservationButton.setBounds(473, 450, 180, 30);
         frame.getContentPane().add(cancelReservationButton);
         cancelReservationButton.addActionListener(e -> cancelReservation());
-        
+
         // Back Button
         JButton backButton = new JButton("Back");
         backButton.setBounds(52, 515, 100, 30);
         frame.getContentPane().add(backButton);
 
         backButton.addActionListener(e -> {
-            frame.dispose(); 
-            EmployeeMenu employeeMenu = new EmployeeMenu(); 
-            employeeMenu.setVisible(true); 
+            frame.dispose();
+            EmployeeMenu employeeMenu = new EmployeeMenu();
+            employeeMenu.setVisible(true);
         });
     }
 
-    private void loadTodayReservations() {
+    private void loadReservationsForDate(Date date) {
         try {
             Connection connection = Database.getConnection();
             if (connection == null) {
@@ -91,21 +116,21 @@ public class ViewReservations {
                 return;
             }
 
-            String todayDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+            String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(date);
             String query = "SELECT * FROM Reservations WHERE reservation_date = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, todayDate);
+            statement.setString(1, formattedDate);
             ResultSet resultSet = statement.executeQuery();
 
             tableModel.setRowCount(0); // Clear existing rows
             while (resultSet.next()) {
                 int reservationId = resultSet.getInt("reservation_id");
                 int customerId = resultSet.getInt("customer_id");
-                String date = resultSet.getString("reservation_date");
+                String reservationDate = resultSet.getString("reservation_date");
                 String time = resultSet.getString("reservation_time");
                 int partySize = resultSet.getInt("party_size");
                 String status = resultSet.getString("reservation_status");
-                tableModel.addRow(new Object[]{reservationId, customerId, date, time, partySize, status});
+                tableModel.addRow(new Object[]{reservationId, customerId, reservationDate, time, partySize, status});
             }
 
         } catch (SQLException e) {
@@ -137,7 +162,7 @@ public class ViewReservations {
 
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(frame, "Reservation marked as present.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadTodayReservations();
+                loadReservationsForDate((Date) dateSpinner.getValue()); // Reload reservations for the selected date
             }
 
         } catch (SQLException e) {
@@ -162,14 +187,15 @@ public class ViewReservations {
                 return;
             }
 
-            String deleteQuery = "DELETE FROM Reservations WHERE reservation_id = ?";
-            PreparedStatement statement = connection.prepareStatement(deleteQuery);
+            // Update the status of the reservation to "Canceled" instead of deleting it
+            String updateQuery = "UPDATE Reservations SET reservation_status = 'Canceled' WHERE reservation_id = ?";
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setInt(1, reservationId);
-            int rowsDeleted = statement.executeUpdate();
+            int rowsUpdated = statement.executeUpdate();
 
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(frame, "Reservation canceled.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadTodayReservations();
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(frame, "Reservation canceled successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadReservationsForDate((Date) dateSpinner.getValue()); // Reload reservations for the selected date
             }
 
         } catch (SQLException e) {
@@ -178,36 +204,4 @@ public class ViewReservations {
         }
     }
 
-    private void cancelOrder() {
-        int selectedRow = reservationsTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(frame, "Please select a reservation to cancel the order.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int customerId = (int) tableModel.getValueAt(selectedRow, 1);
-
-        try {
-            Connection connection = Database.getConnection();
-            if (connection == null) {
-                JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            String updateOrderQuery = "UPDATE Orders SET order_status = 'Canceled' WHERE customer_id = ?";
-            PreparedStatement statement = connection.prepareStatement(updateOrderQuery);
-            statement.setInt(1, customerId);
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(frame, "Order canceled.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(frame, "No active orders found for this customer.", "No Orders", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(frame, "An error occurred while canceling the order.", "Database Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
 }

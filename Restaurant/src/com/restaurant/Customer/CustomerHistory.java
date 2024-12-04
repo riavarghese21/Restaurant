@@ -37,7 +37,7 @@ public class CustomerHistory {
     }
 
     private void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("View History");
         frame.setBounds(100, 100, 800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -71,7 +71,7 @@ public class CustomerHistory {
 
         // Back Button
         JButton backButton = new JButton("Back");
-        backButton.setBounds(341, 518, 112, 29);
+        backButton.setBounds(30, 526, 80, 25);
         backButton.addActionListener(e -> {
             frame.dispose();
             CustomerSignedIn customerSignedInPage = new CustomerSignedIn();
@@ -80,9 +80,9 @@ public class CustomerHistory {
         frame.getContentPane().add(backButton);
         
         JLabel ViewHistoryLabel = new JLabel("View History");
-        ViewHistoryLabel.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+        ViewHistoryLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
         ViewHistoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        ViewHistoryLabel.setBounds(359, 6, 112, 16);
+        ViewHistoryLabel.setBounds(245, 17, 310, 25);
         frame.getContentPane().add(ViewHistoryLabel);
     }
 

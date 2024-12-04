@@ -34,7 +34,6 @@ public class OrderFood {
     private JTextField TotalTextField;
     private DefaultTableModel model;
 
-
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -52,7 +51,7 @@ public class OrderFood {
     }
 
     private void initialize() {
-        frame = new JFrame();
+        frame = new JFrame("Order Online");
         frame.setBounds(100, 100, 800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -61,12 +60,17 @@ public class OrderFood {
         JLabel OrderOnlineLabel = new JLabel("Order Online");
         OrderOnlineLabel.setHorizontalAlignment(SwingConstants.CENTER);
         OrderOnlineLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-        OrderOnlineLabel.setBounds(350, 22, 124, 16);
+        OrderOnlineLabel.setBounds(245, 22, 310, 16);
         frame.getContentPane().add(OrderOnlineLabel);
 
         // Menu Table
         String[] columnNames = {"Name", "Price"};
-        model = new DefaultTableModel(columnNames, 0);
+        model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
+            }
+        };
         table = new JTable(model);
 
         JScrollPane Menu = new JScrollPane(table);
@@ -77,39 +81,40 @@ public class OrderFood {
         MenuLabel.setHorizontalAlignment(SwingConstants.CENTER);
         MenuLabel.setBounds(239, 66, 34, 16);
         frame.getContentPane().add(MenuLabel);
-       
 
         // Item Name Field
         JLabel NameLabel = new JLabel("Name");
         NameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        NameLabel.setBounds(586, 123, 48, 16);
+        NameLabel.setBounds(600, 123, 48, 16);
         frame.getContentPane().add(NameLabel);
 
         ItemNameTextField = new JTextField();
-        ItemNameTextField.setBounds(503, 151, 214, 26);
+        ItemNameTextField.setBounds(525, 151, 214, 26);
         frame.getContentPane().add(ItemNameTextField);
         ItemNameTextField.setColumns(10);
+        ItemNameTextField.setEditable(false); // Make the item name field non-editable
 
         // Price Field
         JLabel PriceLabel = new JLabel("Price");
         PriceLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        PriceLabel.setBounds(586, 192, 48, 16);
+        PriceLabel.setBounds(600, 189, 48, 16);
         frame.getContentPane().add(PriceLabel);
 
         PriceTextField = new JTextField();
-        PriceTextField.setBounds(504, 213, 213, 26);
+        PriceTextField.setBounds(525, 213, 213, 26);
         frame.getContentPane().add(PriceTextField);
         PriceTextField.setColumns(10);
+        PriceTextField.setEditable(false); // Make the price field non-editable
 
         // Quantity
         JLabel QuantityLabel = new JLabel("Quantity");
         QuantityLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        QuantityLabel.setBounds(586, 258, 61, 16);
+        QuantityLabel.setBounds(600, 258, 61, 16);
         frame.getContentPane().add(QuantityLabel);
 
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
         JSpinner QuantitySpinner = new JSpinner(spinnerModel);
-        QuantitySpinner.setBounds(504, 286, 213, 26);
+        QuantitySpinner.setBounds(525, 286, 213, 26);
         frame.getContentPane().add(QuantitySpinner);
 
         QuantitySpinner.addChangeListener(e -> {
@@ -131,82 +136,73 @@ public class OrderFood {
         // Total
         JLabel TotalLabel = new JLabel("Total");
         TotalLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        TotalLabel.setBounds(586, 324, 48, 16);
+        TotalLabel.setBounds(600, 324, 48, 16);
         frame.getContentPane().add(TotalLabel);
 
         TotalTextField = new JTextField();
-        TotalTextField.setBounds(504, 352, 213, 26);
+        TotalTextField.setBounds(525, 352, 213, 26);
         frame.getContentPane().add(TotalTextField);
         TotalTextField.setColumns(10);
+        TotalTextField.setEditable(false); // Make the total field non-editable
 
         // Add to Cart
         JButton AddToCartButton = new JButton("Add to Cart");
-        AddToCartButton.setBounds(559, 416, 117, 29);
+        AddToCartButton.setBounds(583, 400, 117, 29);
         frame.getContentPane().add(AddToCartButton);
-        
-        AddToCartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = ItemNameTextField.getText();
-                String priceText = PriceTextField.getText();
-                int quantity = (int) QuantitySpinner.getValue();
-                String totalText = TotalTextField.getText();
 
-                if (name.isEmpty() || priceText.isEmpty() || totalText.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Please select an item and enter the quantity.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+        AddToCartButton.addActionListener(e -> {
+            String name = ItemNameTextField.getText();
+            String priceText = PriceTextField.getText();
+            int quantity = (int) QuantitySpinner.getValue();
+            String totalText = TotalTextField.getText();
 
-                try {
-                    double price = Double.parseDouble(priceText.replace("$", ""));
-                    double total = Double.parseDouble(totalText.replace("$", ""));
-                    
-                    Cart cartPage = Cart.getInstance(); 
-                    cartPage.addToCart(name, price, quantity, total); 
+            if (name.isEmpty() || priceText.isEmpty() || totalText.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please select an item and enter the quantity.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                    JOptionPane.showMessageDialog(frame, "You items have been added to the cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                double price = Double.parseDouble(priceText.replace("$", ""));
+                double total = Double.parseDouble(totalText.replace("$", ""));
 
-                    ItemNameTextField.setText("");
-                    PriceTextField.setText("");
-                    QuantitySpinner.setValue(1);
-                    TotalTextField.setText("");
+                Cart cartPage = Cart.getInstance();
+                cartPage.addToCart(name, price, quantity, total);
 
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Invalid price or total.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                JOptionPane.showMessageDialog(frame, "Your items have been added to the cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                ItemNameTextField.setText("");
+                PriceTextField.setText("");
+                QuantitySpinner.setValue(0);
+                TotalTextField.setText("");
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Invalid price or total.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
 
         // Back Button
         JButton backButton = new JButton("Back");
-        backButton.setBounds(228, 514, 100, 30);
+        backButton.setBounds(25, 519, 80, 25);
         frame.getContentPane().add(backButton);
 
         backButton.addActionListener(e -> {
-            frame.dispose(); 
-            CustomerSignedIn customerSignedInPage = new CustomerSignedIn(); 
-            customerSignedInPage.setVisible(true); 
+            frame.dispose();
+            CustomerSignedIn customerSignedInPage = new CustomerSignedIn();
+            customerSignedInPage.setVisible(true);
         });
 
-        
-       
-        //View Cart
+        // View Cart
         JButton ViewCartButton = new JButton("View Cart");
-        ViewCartButton.setBounds(468, 515, 117, 29);
+        ViewCartButton.setBounds(341, 515, 117, 29);
         frame.getContentPane().add(ViewCartButton);
 
-        
-        ViewCartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Cart cartPage = Cart.getInstance(); 
-                cartPage.setVisible(true); 
-                frame.setVisible(false);  
-            }
+        ViewCartButton.addActionListener(e -> {
+            Cart cartPage = Cart.getInstance();
+            cartPage.setVisible(true);
+            frame.setVisible(false);
         });
 
-       
+        // Table selection listener
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -225,8 +221,7 @@ public class OrderFood {
             }
         });
     }
-    
-    
+
     private void loadMenuItems() {
         try {
             Connection connection = Database.getConnection();

@@ -43,7 +43,7 @@ public class EmployeeMenu {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("");
+		frame = new JFrame("Employee Signed In");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -52,7 +52,9 @@ public class EmployeeMenu {
 		viewReservationsButton();
 		viewReviewsButton();
 		viewOrdersButton();
-		viewStatisticsButton();		
+		viewStatisticsButton();	
+	    logoutButton();
+
 		
 			JLabel welcomeEmployeeLabel = new JLabel("Welcome Employee!");
 			welcomeEmployeeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -143,6 +145,18 @@ public class EmployeeMenu {
 	    ViewStatistics VS = new ViewStatistics(); 
 	    VS.getFrame().setVisible(true);
 	}
+	
+	public void logoutButton() {
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBounds(81, 215, 310, 29); // Adjust bounds as per your layout
+        frame.getContentPane().add(logoutButton);
+      
+        logoutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Exit the application
+            }
+        });
+    }
 	
 	
 	
