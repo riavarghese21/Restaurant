@@ -21,6 +21,17 @@ VALUES (1, 'Jane Doe', '05/15/1990', '123 Main St, Anytown, USA', 'janedoe', 'pa
 
 SELECT * FROM Customers;
 
+
+CREATE TABLE Employees(
+employee_id INT auto_increment,
+employee_name varchar(255),
+employee_username varchar(255),
+employee_password varchar(255),
+PRIMARY KEY (employee_id)
+);
+
+SELECT * FROM Employees;
+
 CREATE TABLE Reservations (
     reservation_id INT AUTO_INCREMENT,
     customer_id INT,
@@ -37,7 +48,7 @@ SELECT * FROM Reservations;
 CREATE TABLE Menu (
 	item_id INT AUTO_INCREMENT,
     item_name VARCHAR (255),
-    item_price INT,
+    item_price DOUBLE,
     PRIMARY KEY (item_id)
 );
 
@@ -49,6 +60,8 @@ VALUE ('Spicy Tuna Roll', 12.00);
 
 INSERT INTO restaurantdb.Menu (item_name, item_price)
 VALUE ('Salmon Sashimi', 15.00);
+
+SELECT * FROM Menu;
 
 CREATE TABLE PaymentInfo (
 	payment_info_id INT AUTO_INCREMENT,
