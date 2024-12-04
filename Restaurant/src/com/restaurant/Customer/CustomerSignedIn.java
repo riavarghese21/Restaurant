@@ -59,14 +59,14 @@ public class CustomerSignedIn {
 	    JLabel lblNewLabel = new JLabel("Welcome!");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(245, 17, 310, 16);
+		lblNewLabel.setBounds(0, 66, 784, 140);
 		frame.getContentPane().add(lblNewLabel);
-
 	}
 	
 	
 	
 	public void orderOnlineButton() {
+        frame.getContentPane().setLayout(null);
         JButton orderOnlineButton = new JButton("Order Online");
         orderOnlineButton.setBounds(250, 249, 310, 29); 
         frame.getContentPane().add(orderOnlineButton);

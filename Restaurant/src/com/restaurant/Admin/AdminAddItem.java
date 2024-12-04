@@ -88,7 +88,20 @@ public class AdminAddItem {
 				addNewEmployee();
 			}
 		});
-	}
+	       JButton backButton = new JButton("Back");
+	        backButton.setBounds(50, 220, 80, 25);
+	        frame.getContentPane().add(backButton);
+	        backButton.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	goToAdminManageMenuPage();
+	            }
+	        });
+		}
+	    private void goToAdminManageMenuPage() {
+	        frame.dispose();
+	        AdminManageMenu AdminManageMenu = new AdminManageMenu();
+	        AdminManageMenu.setVisible(true);
+	    }
 	
 	public void addNewEmployee() {
 		try {

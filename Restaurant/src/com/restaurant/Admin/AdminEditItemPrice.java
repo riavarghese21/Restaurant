@@ -86,7 +86,20 @@ public class AdminEditItemPrice {
 		newPrice.setColumns(10);
 		
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	goToAdminManageMenuPage();
+            }
+        });
 	}
+    private void goToAdminManageMenuPage() {
+        frame.dispose();
+        AdminManageMenu AdminManageMenu = new AdminManageMenu();
+        AdminManageMenu.setVisible(true);
+    }
 	
 	public void populateComboBox() {
 		try {

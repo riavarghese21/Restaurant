@@ -2,6 +2,7 @@ package com.restaurant.Employee;
 
 import javax.swing.*;
 import com.restaurant.Database;
+import com.restaurant.Encryption;
 import com.restaurant.SignInPage;
 
 import java.awt.*;
@@ -102,6 +103,7 @@ public class EmployeeSignIn {
     private void loginEmployee() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
+        String encryptedPassword = Encryption.encrypt(password);
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -118,7 +120,7 @@ public class EmployeeSignIn {
             String query = "SELECT * FROM Employees WHERE Employee_username = ? AND Employee_password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, encryptedPassword);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

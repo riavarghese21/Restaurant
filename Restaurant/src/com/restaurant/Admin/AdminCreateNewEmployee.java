@@ -94,12 +94,25 @@ public class AdminCreateNewEmployee {
 				addNewEmployee();
 			}
 		});
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	goToAdminManageEmployeesPage();
+            }
+        });
 	}
+    private void goToAdminManageEmployeesPage() {
+        frame.dispose();
+        AdminManageEmployees AdminManageEmployees = new AdminManageEmployees();
+        AdminManageEmployees.setVisible(true);
+    }
 	
 	public void addNewEmployee() {
 		try {
 			Connection connection = Database.connection;
-			String query = "INSERT INTO Employees VALUES (?, ?, ?)";
+			String query = "INSERT INTO Employees (employee_username, employee_password, employee_name) VALUES (?, ?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
 			String password = new String(passwordField.getPassword());
 			String encryptedPswd = Encryption.encrypt(password);

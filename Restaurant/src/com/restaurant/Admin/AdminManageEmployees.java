@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import com.restaurant.SignInPage;
+
 public class AdminManageEmployees {
 
 	public JFrame frame;
@@ -92,8 +94,20 @@ public class AdminManageEmployees {
 				goToEditFullName();
 			}
 		});
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToAdminSignedInPage();
+            }
+        });
 	}
-
+    private void goToAdminSignedInPage() {
+        frame.dispose();
+        AdminSignedIn AdminSignedIn = new AdminSignedIn();
+        AdminSignedIn.setVisible(true);
+    }
 	public void goToCreateNewEmployee() {
 		frame.dispose();
 		AdminCreateNewEmployee CNE = new AdminCreateNewEmployee(); 
@@ -128,11 +142,8 @@ public class AdminManageEmployees {
 		AEEFN.initialize();
 		AEEFN.frame.setVisible(true);
 	}
-	
-	public void setLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) { }
-	}
+	public void setVisible(boolean visible) {
+		frame.setVisible(visible);
+    }
 
 }

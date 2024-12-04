@@ -64,7 +64,7 @@ public class AdminDeleteReviews {
 		frame.getContentPane().add(reviewCB);
 		
 		JButton deleteButton = new JButton("Delete Review");
-		deleteButton.setBounds(117, 202, 180, 23);
+		deleteButton.setBounds(105, 189, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -74,7 +74,20 @@ public class AdminDeleteReviews {
 		});
 
 		populateComboBox();
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToAdminSignedInPage();
+            }
+        });
 	}
+    private void goToAdminSignedInPage() {
+        frame.dispose();
+        AdminSignedIn AdminSignedIn = new AdminSignedIn();
+        AdminSignedIn.setVisible(true);
+    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database

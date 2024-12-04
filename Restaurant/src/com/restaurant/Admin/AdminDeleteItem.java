@@ -64,7 +64,7 @@ public class AdminDeleteItem {
 		frame.getContentPane().add(itemCB);
 		
 		JButton deleteButton = new JButton("Delete Item");
-		deleteButton.setBounds(117, 202, 180, 23);
+		deleteButton.setBounds(105, 186, 192, 23);
 		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
@@ -74,7 +74,20 @@ public class AdminDeleteItem {
 		});
 
 		populateComboBox();
-	}
+	       JButton backButton = new JButton("Back");
+	        backButton.setBounds(50, 220, 80, 25);
+	        frame.getContentPane().add(backButton);
+	        backButton.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	goToAdminManageMenuPage();
+	            }
+	        });
+		}
+	    private void goToAdminManageMenuPage() {
+	        frame.dispose();
+	        AdminManageMenu AdminManageMenu = new AdminManageMenu();
+	        AdminManageMenu.setVisible(true);
+	    }
 	public void populateComboBox() {
 		try {
 			Connection connection = Database.connection; // Connect to database

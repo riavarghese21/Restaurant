@@ -15,6 +15,7 @@ import com.restaurant.SignInPage;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
@@ -22,7 +23,7 @@ public class CreateCustomerAccount {
 
 	public JFrame frame;
 	private JTextField usernameTF;
-	private JTextField pswdTF;
+	private JPasswordField pswdTF;
 	private JTextField fullNameTF;
 	private JTextField addressTF;
 
@@ -68,12 +69,12 @@ public class CreateCustomerAccount {
 		frame.getContentPane().add(usernameTF);
 		usernameTF.setColumns(10);
 		
-		pswdTF = new JTextField();
+		pswdTF = new JPasswordField();
 		pswdTF.setBounds(145, 138, 310, 20);
 		frame.getContentPane().add(pswdTF);
 		pswdTF.setColumns(10);
 		
-		fullNameTF = new JTextField("");
+		fullNameTF = new JTextField();
 		fullNameTF.setBounds(145, 196, 310, 20);
 		frame.getContentPane().add(fullNameTF);
 		fullNameTF.setColumns(10);
@@ -145,30 +146,31 @@ public class CreateCustomerAccount {
 	public void addNewCustomer() {
 		try {
 			Connection connection = Database.connection;
-			String query = "INSERT INTO Customers VALUES (?, ?, ?, ?)";
+			String query = "INSERT INTO Customers (customer_name, customer_address, customer_username, customer_password) VALUES (?, ?, ?, ?)";
 			PreparedStatement stm = connection.prepareStatement(query);
-			String encryptedPswd = Encryption.encrypt(pswdTF.getText());
-			stm.setString(1, usernameTF.getText());
-			stm.setString(2, encryptedPswd);
-			stm.setString(3, fullNameTF.getText());
-			stm.setString(4,  addressTF.getText());
+			String password = new String(pswdTF.getPassword());
+			String encryptedPswd = Encryption.encrypt(password);
+			stm.setString(1, fullNameTF.getText());
+			stm.setString(2, addressTF.getText());
+			stm.setString(3, usernameTF.getText());
+			stm.setString(4, encryptedPswd);
 
 			stm.executeUpdate();
 
 
 			
-			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
-			PreparedStatement stm2 = connection.prepareStatement(query2);
-			stm2.setString(1, usernameTF.getText());
-			stm2.setString(2, pswdTF.getText());
-
-			stm2.executeUpdate();
-			
-			String query3 = "GRANT SELECT, UPDATE ON restaurantdb.Customers TO ?@'localhost'";
-			PreparedStatement stm3 = connection.prepareStatement(query3);
-			stm3.setString(1, usernameTF.getText());
-			
-			stm3.executeUpdate();
+//			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
+//			PreparedStatement stm2 = connection.prepareStatement(query2);
+//			stm2.setString(1, usernameTF.getText());
+//			stm2.setString(2, password);
+//
+//			stm2.executeUpdate();
+//			
+//			String query3 = "GRANT SELECT, UPDATE ON restaurantdb.Customers TO ?@'localhost'";
+//			PreparedStatement stm3 = connection.prepareStatement(query3);
+//			stm3.setString(1, usernameTF.getText());
+//			
+//			stm3.executeUpdate();
 			
 			
 			JOptionPane.showMessageDialog(null, "Account Created Successfully!", "", JOptionPane.DEFAULT_OPTION);

@@ -82,8 +82,20 @@ public class AdminManageCustomers {
 				goToEditFullName();
 			}
 		});
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 220, 80, 25);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToAdminSignedInPage();
+            }
+        });
 	}
-
+    private void goToAdminSignedInPage() {
+        frame.dispose();
+        AdminSignedIn AdminSignedIn = new AdminSignedIn();
+        AdminSignedIn.setVisible(true);
+    }
 	public void goToDeleteCustomer() {
 		frame.dispose();
 		AdminDeleteCustomer ADC = new AdminDeleteCustomer(); 
@@ -111,5 +123,7 @@ public class AdminManageCustomers {
 		AECFN.initialize();
 		AECFN.frame.setVisible(true);
 	}
-
+	public void setVisible(boolean visible) {
+		frame.setVisible(visible);
+    }
 }
