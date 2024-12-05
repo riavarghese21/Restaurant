@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 public class AdminDeleteOrders {
 
 	public JFrame frame;
-	private JFrame frame_1;
 	private static JComboBox<String> orderCB;
 	static DefaultComboBoxModel<String> orderCBModel = new DefaultComboBoxModel<String>();
 
@@ -34,7 +33,7 @@ public class AdminDeleteOrders {
 			public void run() {
 				try {
 					AdminDeleteOrders window = new AdminDeleteOrders();
-					window.frame_1.setVisible(true);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,29 +52,28 @@ public class AdminDeleteOrders {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		
-		frame_1 = new JFrame("Delete Order");
-		frame_1.setBounds(100, 100, 450, 300);
-		frame_1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame_1.getContentPane().setLayout(null);
+		frame = new JFrame("Delete Orders");
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
 		JLabel selectOrderLBL = new JLabel("Select Order");
 		selectOrderLBL.setBounds(130, 72, 134, 14);
-		frame_1.getContentPane().add(selectOrderLBL);
+		frame.getContentPane().add(selectOrderLBL);
 		
 		orderCB = new JComboBox<String>();
 		orderCB.setBounds(130, 98, 192, 22);
-		frame_1.getContentPane().add(orderCB);
+		frame.getContentPane().add(orderCB);
 		
-		JLabel lblDeleteCustomerAccount = new JLabel("Delete Order");
-		lblDeleteCustomerAccount.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDeleteCustomerAccount.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-		lblDeleteCustomerAccount.setBounds(75, 10, 310, 16);
-		frame_1.getContentPane().add(lblDeleteCustomerAccount);
+		JLabel lblDeleteOrder = new JLabel("Delete Order");
+		lblDeleteOrder.setBounds(75, 10, 310, 16);
+		lblDeleteOrder.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeleteOrder.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		frame.getContentPane().add(lblDeleteOrder);
 		
 		JButton deleteButton = new JButton("Delete Order");
 		deleteButton.setBounds(130, 159, 192, 23);
-		frame_1.getContentPane().add(deleteButton);
+		frame.getContentPane().add(deleteButton);
 		
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -86,7 +84,7 @@ public class AdminDeleteOrders {
 		populateComboBox();
         JButton backButton = new JButton("Back");
         backButton.setBounds(25, 220, 80, 25);
-        frame_1.getContentPane().add(backButton);
+        frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 goToAdminSignedInPage();
@@ -94,7 +92,7 @@ public class AdminDeleteOrders {
         });
 	}
     private void goToAdminSignedInPage() {
-        frame_1.dispose();
+    	frame.dispose();
         AdminSignedIn AdminSignedIn = new AdminSignedIn();
         AdminSignedIn.setVisible(true);
     }
@@ -120,11 +118,17 @@ public class AdminDeleteOrders {
 	public void deleteItem() {
 		try {
 			Connection connection = Database.connection;
-			String query = "DELETE FROM Orders WHERE order_id = ?";
-			PreparedStatement stm = connection.prepareStatement(query);
+			
+			String query1 = "DELETE FROM OrderItems WHERE order_id = ?";
+			PreparedStatement stm1 = connection.prepareStatement(query1);
 			String value = orderCB.getSelectedItem().toString();
-			stm.setString(1, value);
-			stm.executeUpdate();
+			stm1.setString(1, value);
+			stm1.executeUpdate();
+			
+			String query2 = "DELETE FROM Orders WHERE order_id = ?";
+			PreparedStatement stm2 = connection.prepareStatement(query2);
+			stm2.setString(1, value);
+			stm2.executeUpdate();
 			
 			JOptionPane.showMessageDialog(null, "Order Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
 			populateComboBox();
