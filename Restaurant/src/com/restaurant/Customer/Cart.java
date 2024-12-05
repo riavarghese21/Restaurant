@@ -232,6 +232,12 @@ public class Cart {
         }
         TotalCost.setText("$" + String.format("%.2f", totalCost));
     }
+    
+    public void clearCart() {
+        model.setRowCount(0);  // Clear all rows in the cart
+        updateTotalCost();  // Update the total cost after clearing
+    }
+
 
     public void setVisible(boolean visible) {
         frame.setVisible(visible);

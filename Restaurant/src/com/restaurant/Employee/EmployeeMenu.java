@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import com.restaurant.SignInPage;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -59,7 +62,7 @@ public class EmployeeMenu {
 			JLabel welcomeEmployeeLabel = new JLabel("Welcome Employee!");
 			welcomeEmployeeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			welcomeEmployeeLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-			welcomeEmployeeLabel.setBounds(143, 6, 172, 21);
+			welcomeEmployeeLabel.setBounds(145, 6, 172, 21);
 			frame.getContentPane().add(welcomeEmployeeLabel);
 			
 	}
@@ -147,16 +150,19 @@ public class EmployeeMenu {
 	}
 	
 	public void logoutButton() {
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(81, 215, 310, 29); 
-        frame.getContentPane().add(logoutButton);
-      
-        logoutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-    }
+	    JButton logoutButton = new JButton("Logout");
+	    logoutButton.setBounds(81, 220, 310, 29); // Adjust bounds as per your layout
+	    frame.getContentPane().add(logoutButton);
+	 
+	    logoutButton.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            frame.dispose(); // Close the current window
+	            SignInPage signInPage = new SignInPage(); // Create an instance of SignInPage
+	            signInPage.setVisible(true); // Show the SignInPage
+	        }
+	    });
+	}
+
 	
 	
 	

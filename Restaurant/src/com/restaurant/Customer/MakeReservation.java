@@ -156,11 +156,14 @@ public class MakeReservation {
     private void selectTimeSlot(JButton selectedButton) {
         for (JButton button : timeSlotButtons) {
             if (button.isEnabled()) {
-                button.setBackground(null); 
+                button.setBackground(null);
+                button.setForeground(Color.BLACK); // Reset text color to default
             }
         }
-        selectedButton.setBackground(Color.CYAN); 
+        selectedButton.setBackground(Color.CYAN); // Highlight selected button
+        selectedButton.setForeground(Color.BLACK); // Set text color to make it visible on cyan background
     }
+
 
     private void makeReservation() {
         int customerId = UserSession.getInstance().getCustomerId();

@@ -92,11 +92,7 @@ public class MakePayment {
         frame.getContentPane().add(ApplyGiftCardButton);
         ApplyGiftCardButton.addActionListener(e -> applyGiftCard());
 
-        // Total Amount Label
-        TotalAmountLabel = new JLabel("Total Amount: $" + String.format("%.2f", orderTotalAmount));
-        TotalAmountLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        TotalAmountLabel.setBounds(254, 113, 300, 26);
-        frame.getContentPane().add(TotalAmountLabel);
+      
 
         // Card Type ComboBox
         String[] cardTypes = {"Card Type", "Discover", "MasterCard", "Visa"};
@@ -349,6 +345,7 @@ public class MakePayment {
                     remainingAmount = 0;
                 }
 
+                // Update the existing TotalAmountLabel instead of adding a new one
                 TotalAmountLabel.setText("Total Amount Remaining: $" + String.format("%.2f", remainingAmount));
                 JOptionPane.showMessageDialog(frame, "Gift card applied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 isPaymentMade = true;
@@ -377,6 +374,7 @@ public class MakePayment {
             e.printStackTrace();
         }
     }
+
 
     private double calculateTotalFromCart() {
         double totalCost = 0.0;
@@ -452,7 +450,13 @@ public class MakePayment {
                         itemStatement.executeUpdate();
                     }
 
+                    // Show success message and clear cart
                     JOptionPane.showMessageDialog(frame, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // Clear the cart after placing the order
+                    cartPage.clearCart();
+
+                    // Close the payment frame and go back to the customer signed-in page
                     frame.dispose();
                     CustomerSignedIn customerSignedInPage = new CustomerSignedIn();
                     customerSignedInPage.setVisible(true);
@@ -468,6 +472,7 @@ public class MakePayment {
             ex.printStackTrace();
         }
     }
+
 
 
 

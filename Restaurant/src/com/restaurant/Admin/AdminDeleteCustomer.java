@@ -115,18 +115,26 @@ public class AdminDeleteCustomer {
 		}
 	}
 	public void deleteCustomer() {
-		try {
-			Connection connection = Database.connection;
-			String query = "DELETE FROM Customers WHERE customer_username = ?";
-			PreparedStatement stm = connection.prepareStatement(query);
-			String value = customerCB.getSelectedItem().toString();
-			stm.setString(1, value);
-			stm.executeUpdate();
-			
-			JOptionPane.showMessageDialog(null, "Account Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
-			populateComboBox();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+	    try {
+	        Connection connection = Database.connection;
+	        String selectedCustomerUsername = customerCB.getSelectedItem().toString();
+
+	        // Step 1: Delete the customer
+	        String deleteCustomerQuery = "DELETE FROM Customers WHERE customer_username = ?";
+	        PreparedStatement deleteCustomerStm = connection.prepareStatement(deleteCustomerQuery);
+	        deleteCustomerStm.setString(1, selectedCustomerUsername);
+	        int rowsAffected = deleteCustomerStm.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            JOptionPane.showMessageDialog(null, "Account Deleted Successfully!", "", JOptionPane.DEFAULT_OPTION);
+	            populateComboBox();
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Customer not found!", "", JOptionPane.ERROR_MESSAGE);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error deleting customer: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
 }

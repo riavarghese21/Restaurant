@@ -57,17 +57,20 @@ public class AdminSignedIn {
 		deleteReviewsButton();
 		logoutButton();
 	}
-    public void logoutButton() {
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(95, 294, 310, 29); // Adjust bounds as per your layout
-        frame.getContentPane().add(logoutButton);
-     
-        logoutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0); // Exit the application
-            }
-        });
-    }
+	public void logoutButton() {
+	    JButton logoutButton = new JButton("Logout");
+	    logoutButton.setBounds(95, 294, 310, 29);
+	    frame.getContentPane().add(logoutButton);
+	 
+	    logoutButton.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            frame.dispose();
+	            SignInPage signInPage = new SignInPage(); 
+	            signInPage.setVisible(true);
+	        }
+	    });
+	}
+
 	public void manageEmployeesButton() {
 		{
 			JLabel lblWelcomeAdmin = new JLabel("Welcome Admin!");

@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import com.restaurant.SignInPage;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -170,15 +173,18 @@ public class CustomerSignedIn {
     
     public void logoutButton() {
         JButton logoutButton = new JButton("Logout");
-        logoutButton.setBounds(145, 305, 310, 29); // Adjust bounds as per your layout
+        logoutButton.setBounds(145, 308, 310, 29); // Adjust bounds as per your layout
         frame.getContentPane().add(logoutButton);
      
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0); // Exit the application
+                frame.dispose(); // Close the current window
+                SignInPage signInPage = new SignInPage(); // Create an instance of SignInPage
+                signInPage.setVisible(true); // Show the SignInPage
             }
         });
     }
+
 	
 	
 	public void setLookAndFeel() {
