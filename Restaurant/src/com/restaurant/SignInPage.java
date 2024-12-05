@@ -37,33 +37,30 @@ public class SignInPage {
 		initialize();
 	}
 	public void initialize() {
-		frmChooseSigninOption = new JFrame("Choose sign-in option");
+		frmChooseSigninOption = new JFrame("Choose Sign-in Option");
 		frmChooseSigninOption.setTitle("Choose Sign-in Option");
 		frmChooseSigninOption.setBounds(100, 100, 500, 300);
 		frmChooseSigninOption.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmChooseSigninOption.getContentPane().setLayout(null);
 		
-		setLookAndFeel(); // Makes the UI look modern if the user is running on Windows
+		setLookAndFeel(); 
 		
-		Database.connect(); // Establish connection to database
-		setupClosingDBConnection(); // Handles closing the database connection if the user closes the program
-		
+		Database.connect(); 
+		setupClosingDBConnection(); 
 		customerSignInButton();
 		employeeSignInButton();
 		adminSignInButton();
 	}
-	//Makes the UI look modern if the user is on Windows
 	public void setLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) { }
 	}
 	
-	// Handles closing the database connection if the user closes the program
 	public static void setupClosingDBConnection() {
 	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 	        public void run() {
-	            Database.closeConnection(); // Use the closeConnection() method to close the connection
+	            Database.closeConnection(); 
 	        }
 	    }, "Shutdown-thread"));
 	}

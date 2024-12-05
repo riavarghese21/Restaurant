@@ -64,7 +64,7 @@ public class OrderFood {
         frame.getContentPane().add(OrderOnlineLabel);
 
         // Menu Table
-        String[] columnNames = {"Name", "Price"};
+        String[] columnNames = {"Item ID", "Name", "Price"};
         model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -150,7 +150,15 @@ public class OrderFood {
         frame.getContentPane().add(AddToCartButton);
 
         AddToCartButton.addActionListener(e -> {
-            String name = ItemNameTextField.getText();
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(frame, "Please select an item from the menu.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Correctly retrieve values from table based on the updated column indexes
+            int itemId = (int) model.getValueAt(selectedRow, 0); // Item ID is at column index 0
+            String name = model.getValueAt(selectedRow, 1).toString(); // Name is at column index 1
             String priceText = PriceTextField.getText();
             int quantity = (int) QuantitySpinner.getValue();
             String totalText = TotalTextField.getText();
@@ -165,7 +173,7 @@ public class OrderFood {
                 double total = Double.parseDouble(totalText.replace("$", ""));
 
                 Cart cartPage = Cart.getInstance();
-                cartPage.addToCart(name, price, quantity, total);
+                cartPage.addToCart(itemId, name, price, quantity, total);
 
                 JOptionPane.showMessageDialog(frame, "Your items have been added to the cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -178,6 +186,7 @@ public class OrderFood {
                 JOptionPane.showMessageDialog(frame, "Invalid price or total.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
 
         // Back Button
         JButton backButton = new JButton("Back");
@@ -207,8 +216,8 @@ public class OrderFood {
                 if (!e.getValueIsAdjusting()) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
-                        String name = model.getValueAt(selectedRow, 0).toString();
-                        String price = model.getValueAt(selectedRow, 1).toString();
+                        String name = model.getValueAt(selectedRow, 1).toString(); // Name is at column index 1
+                        String price = model.getValueAt(selectedRow, 2).toString(); // Price is at column index 2
 
                         ItemNameTextField.setText(name);
                         PriceTextField.setText(price);
@@ -227,14 +236,15 @@ public class OrderFood {
                 System.out.println("Failed to connect to the database.");
                 return;
             }
-            String query = "SELECT item_name, item_price FROM Menu";
+            String query = "SELECT item_id, item_name, item_price FROM Menu";
             PreparedStatement stm = connection.prepareStatement(query);
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
+                int itemId = rs.getInt("item_id");
                 String name = rs.getString("item_name");
-                int price = rs.getInt("item_price");
-                model.addRow(new Object[]{name, "$" + price});
+                double price = rs.getDouble("item_price"); // Corrected to double for consistency
+                model.addRow(new Object[]{itemId, name, "$" + String.format("%.2f", price)});
             }
             System.out.println("Menu items loaded successfully.");
         } catch (SQLException e) {

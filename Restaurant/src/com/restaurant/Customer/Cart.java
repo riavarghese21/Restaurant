@@ -37,14 +37,12 @@ public class Cart {
      * Launch the application.
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Cart window = new Cart();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                Cart window = new Cart();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -73,7 +71,7 @@ public class Cart {
         frame.getContentPane().setLayout(null);
 
         // Cart Table
-        String[] columnNames = {"Name", "Price", "Quantity", "Total"};
+        String[] columnNames = {"Item ID", "Name", "Price", "Quantity", "Total"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         JScrollPane CartScrollPane = new JScrollPane(table);
@@ -90,17 +88,14 @@ public class Cart {
         RemoveFromCartButton.setBounds(556, 202, 153, 29);
         frame.getContentPane().add(RemoveFromCartButton);
 
-        RemoveFromCartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
+        RemoveFromCartButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
 
-                if (selectedRow != -1) {
-                    model.removeRow(selectedRow);
-                    updateTotalCost();
-                } else {
-                    System.out.println("Please select an item to remove from the cart.");
-                }
+            if (selectedRow != -1) {
+                model.removeRow(selectedRow);
+                updateTotalCost();
+            } else {
+                System.out.println("Please select an item to remove from the cart.");
             }
         });
 
@@ -119,20 +114,17 @@ public class Cart {
         UpdateQuantityButton.setBounds(556, 333, 153, 29);
         frame.getContentPane().add(UpdateQuantityButton);
 
-        UpdateQuantityButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
-                if (selectedRow != -1) {
-                    int newQuantity = (int) ModifyQuantitySpinner.getValue();
-                    double price = Double.parseDouble(model.getValueAt(selectedRow, 1).toString().replace("$", ""));
-                    double newTotal = newQuantity * price;
-                    model.setValueAt(newQuantity, selectedRow, 2);
-                    model.setValueAt("$" + String.format("%.2f", newTotal), selectedRow, 3);
-                    updateTotalCost();
-                } else {
-                    System.out.println("Please select an item to update the quantity.");
-                }
+        UpdateQuantityButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                int newQuantity = (int) ModifyQuantitySpinner.getValue();
+                double price = Double.parseDouble(model.getValueAt(selectedRow, 2).toString().replace("$", ""));
+                double newTotal = newQuantity * price;
+                model.setValueAt(newQuantity, selectedRow, 3);
+                model.setValueAt("$" + String.format("%.2f", newTotal), selectedRow, 4);
+                updateTotalCost();
+            } else {
+                System.out.println("Please select an item to update the quantity.");
             }
         });
 
@@ -141,12 +133,10 @@ public class Cart {
         AddMoreItemsButton.setBounds(556, 161, 153, 29);
         frame.getContentPane().add(AddMoreItemsButton);
 
-        AddMoreItemsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                OrderFood orderFoodPage = new OrderFood();
-                orderFoodPage.main(null);
-            }
+        AddMoreItemsButton.addActionListener(e -> {
+            frame.dispose();
+            OrderFood orderFoodPage = new OrderFood();
+            orderFoodPage.main(null);
         });
 
         // Go to Payment Button
@@ -154,14 +144,13 @@ public class Cart {
         GoToPaymentButton.setBounds(367, 500, 117, 29);
         frame.getContentPane().add(GoToPaymentButton);
 
-        GoToPaymentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                MakePayment makePaymentPage = new MakePayment();
-                makePaymentPage.setVisible(true);
-            }
+        GoToPaymentButton.addActionListener(e -> {
+            double totalCost = calculateTotalFromCart();
+            frame.dispose();
+            MakePayment makePaymentPage = new MakePayment(totalCost);
+            makePaymentPage.setVisible(true);
         });
+
 
         // Title
         ViewCartLabel = new JLabel("View Cart");
@@ -174,13 +163,10 @@ public class Cart {
         BackButton.setBounds(30, 523, 80, 25);
         frame.getContentPane().add(BackButton);
 
-        BackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                OrderFood orderFoodPage = new OrderFood();
-                orderFoodPage.main(null);
-            }
+        BackButton.addActionListener(e -> {
+            frame.dispose();
+            OrderFood orderFoodPage = new OrderFood();
+            orderFoodPage.main(null);
         });
 
         // Total Cost Label and Field
@@ -200,7 +186,7 @@ public class Cart {
                 if (!e.getValueIsAdjusting()) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
-                        int quantity = (int) model.getValueAt(selectedRow, 2);
+                        int quantity = (int) model.getValueAt(selectedRow, 3);
                         ModifyQuantitySpinner.setValue(quantity);  // Update spinner value
                     }
                 }
@@ -210,30 +196,38 @@ public class Cart {
         updateTotalCost();
     }
 
-    public void addToCart(String name, double price, int quantity, double total) {
+    private double calculateTotalFromCart() {
+        double totalCost = 0.0;
         for (int i = 0; i < model.getRowCount(); i++) {
-            String existingName = model.getValueAt(i, 0).toString();
-            if (existingName.equals(name)) {
-                int existingQuantity = (int) model.getValueAt(i, 2);
+            String totalText = model.getValueAt(i, 4).toString().replace("$", "");
+            totalCost += Double.parseDouble(totalText);
+        }
+        return totalCost;
+    }
+
+	public void addToCart(int itemId, String name, double price, int quantity, double total) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            int existingItemId = (int) model.getValueAt(i, 0);
+            if (existingItemId == itemId) {
+                int existingQuantity = (int) model.getValueAt(i, 3);
                 int newQuantity = existingQuantity + quantity;
                 double newTotal = newQuantity * price;
 
-                model.setValueAt(newQuantity, i, 2);
-                model.setValueAt("$" + String.format("%.2f", newTotal), i, 3);
+                model.setValueAt(newQuantity, i, 3);
+                model.setValueAt("$" + String.format("%.2f", newTotal), i, 4);
                 updateTotalCost();
                 return;
             }
         }
 
-        model.addRow(new Object[]{name, "$" + String.format("%.2f", price), quantity, "$" + String.format("%.2f", total)});
+        model.addRow(new Object[]{itemId, name, "$" + String.format("%.2f", price), quantity, "$" + String.format("%.2f", total)});
         updateTotalCost();
     }
-
 
     private void updateTotalCost() {
         double totalCost = 0.0;
         for (int i = 0; i < model.getRowCount(); i++) {
-            String totalText = model.getValueAt(i, 3).toString().replace("$", "");
+            String totalText = model.getValueAt(i, 4).toString().replace("$", "");
             totalCost += Double.parseDouble(totalText);
         }
         TotalCost.setText("$" + String.format("%.2f", totalCost));

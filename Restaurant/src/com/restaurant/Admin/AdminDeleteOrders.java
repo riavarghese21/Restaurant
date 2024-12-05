@@ -53,10 +53,6 @@ public class AdminDeleteOrders {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		frame = new JFrame("Delete Orders");
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
 		
 		frame_1 = new JFrame("Delete Order");
 		frame_1.setBounds(100, 100, 450, 300);

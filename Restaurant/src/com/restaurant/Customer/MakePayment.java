@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import com.restaurant.Database;
 import com.restaurant.Encryption;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -30,7 +29,7 @@ public class MakePayment {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-                MakePayment window = new MakePayment();
+                MakePayment window = new MakePayment(0.0); // Default value for demonstration
                 window.frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -38,7 +37,9 @@ public class MakePayment {
         });
     }
 
-    public MakePayment() {
+
+    public MakePayment(double orderTotalAmount) {
+        this.orderTotalAmount = orderTotalAmount;
         initialize();
     }
 
@@ -52,9 +53,14 @@ public class MakePayment {
         MakePaymentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
         MakePaymentLabel.setBounds(347, 6, 130, 29);
         frame.getContentPane().add(MakePaymentLabel);
+        
+        TotalAmountLabel = new JLabel();
+        TotalAmountLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        TotalAmountLabel.setBounds(254, 113, 300, 26);
+        frame.getContentPane().add(TotalAmountLabel);
 
-        orderTotalAmount = calculateTotalFromCart();
-
+        TotalAmountLabel.setText("Total Amount: $" + String.format("%.2f", orderTotalAmount));
+        
         // Back Button
         JButton BackButton = new JButton("Back");
         BackButton.setBounds(30, 526, 80, 25);
@@ -197,27 +203,20 @@ public class MakePayment {
             double finalAmount = orderTotalAmount - appliedGiftCardValue;
 
             // Ensure the final amount is properly validated
+            if (finalAmount < 0) {
+                finalAmount = 0; // Ensures total cannot be negative
+            }
+
             if (finalAmount > 0 && !isPaymentMade) {
                 // If there's a remaining amount and no saved payment information, show an error
                 JOptionPane.showMessageDialog(frame, "Please save credit card information before placing the order. Gift card does not cover the full amount.", "Payment Required", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (finalAmount <= 0) {
-                // If the gift card fully covers the payment, place the order
-                processOrder(0);
-            } else if (finalAmount > 0 && isPaymentMade) {
-                // If there is a remaining balance and credit card details are saved, place the order
-                processOrder(finalAmount);
-            } else {
-                // This is a fallback case, which should not happen if logic is correct
-                JOptionPane.showMessageDialog(frame, "Unexpected payment error. Please review the payment information.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            processOrder(finalAmount);
         });
-
-        
     }
-    
+
     private void savePaymentInfo() {
         try {
             Connection connection = Database.getConnection();
@@ -286,8 +285,6 @@ public class MakePayment {
         }
     }
 
-
-
     private void loadSavedPaymentInfo() {
         try {
             Connection connection = Database.getConnection();
@@ -303,21 +300,21 @@ public class MakePayment {
             ResultSet resultSet = paymentStatement.executeQuery();
 
             if (resultSet.next()) {
-                // Set the UI elements with values from the database
+                // Set the UI elements with values from the database and decrypt where necessary
                 CardType.setSelectedItem(resultSet.getString("card_type"));
-                CardNumber.setText(resultSet.getString("card_number"));
-                ExpirationMonthComboBox.setSelectedItem(String.valueOf(resultSet.getInt("expiration_month")));
-                ExpirationYearComboBox.setSelectedItem(resultSet.getInt("expiration_year"));
+                CardNumber.setText(Encryption.decrypt(resultSet.getString("card_number")));
+                ExpirationMonthComboBox.setSelectedItem(Encryption.decrypt(resultSet.getString("expiration_month")));
+                ExpirationYearComboBox.setSelectedItem(Integer.parseInt(Encryption.decrypt(resultSet.getString("expiration_year"))));
                 FirstName.setText(resultSet.getString("first_name"));
                 LastName.setText(resultSet.getString("last_name"));
-                CVV.setText(String.valueOf(resultSet.getInt("cvv")));
+                CVV.setText(Encryption.decrypt(resultSet.getString("cvv")));
                 BillingAddress.setText(resultSet.getString("billing_address"));
                 City.setText(resultSet.getString("city"));
                 StateComboBox.setSelectedItem(resultSet.getString("state"));
                 ZipCode.setText(resultSet.getString("zip_code"));
 
                 JOptionPane.showMessageDialog(frame, "Payment information loaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                isPaymentMade = true;  // Mark payment as made when loading card details
+                isPaymentMade = true;  // Mark payment as made when card details are loaded successfully
             } else {
                 JOptionPane.showMessageDialog(frame, "No saved card found for this user.", "No Card Found", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -381,7 +378,6 @@ public class MakePayment {
         }
     }
 
-
     private double calculateTotalFromCart() {
         double totalCost = 0.0;
         Cart cartPage = Cart.getInstance();
@@ -409,6 +405,7 @@ public class MakePayment {
 
             int customerId = getCurrentCustomerId();
 
+            // Validate customer exists
             String checkCustomerQuery = "SELECT COUNT(*) FROM Customers WHERE customer_id = ?";
             PreparedStatement checkCustomerStatement = connection.prepareStatement(checkCustomerQuery);
             checkCustomerStatement.setInt(1, customerId);
@@ -418,10 +415,11 @@ public class MakePayment {
                 return;
             }
 
+            // Insert into Orders table
             String insertOrderQuery = "INSERT INTO Orders (customer_id, order_date, total_amount, order_status) VALUES (?, ?, ?, ?)";
             PreparedStatement orderStatement = connection.prepareStatement(insertOrderQuery, PreparedStatement.RETURN_GENERATED_KEYS);
-            
-            String orderDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
+
+            String orderDate = new SimpleDateFormat("MM/d/yyyy HH:mm:ss").format(new Date());
             orderStatement.setInt(1, customerId);
             orderStatement.setString(2, orderDate);
             orderStatement.setDouble(3, finalAmount);
@@ -434,20 +432,22 @@ public class MakePayment {
                 if (generatedKeys.next()) {
                     int orderId = generatedKeys.getInt(1);
 
+                    // Get the cart items and save them to OrderItems table
                     Cart cartPage = Cart.getInstance();
                     DefaultTableModel cartModel = cartPage.model;
 
                     for (int i = 0; i < cartModel.getRowCount(); i++) {
-                        String itemId = cartModel.getValueAt(i, 0).toString();
-                        int quantity = Integer.parseInt(cartModel.getValueAt(i, 2).toString());
-                        double price = Double.parseDouble(cartModel.getValueAt(i, 1).toString().replace("$", ""));
+                        int itemId = Integer.parseInt(cartModel.getValueAt(i, 0).toString()); // Get item ID from first column
+                        int quantity = Integer.parseInt(cartModel.getValueAt(i, 3).toString()); // Get quantity from third column
+                        double unitPrice = Double.parseDouble(cartModel.getValueAt(i, 2).toString().replace("$", "").trim()); // Get price from second column, remove '$'
 
+                        // Insert into OrderItems table
                         String insertItemQuery = "INSERT INTO OrderItems (order_id, item_id, quantity, price) VALUES (?, ?, ?, ?)";
                         PreparedStatement itemStatement = connection.prepareStatement(insertItemQuery);
                         itemStatement.setInt(1, orderId);
-                        itemStatement.setString(2, itemId);
+                        itemStatement.setInt(2, itemId);
                         itemStatement.setInt(3, quantity);
-                        itemStatement.setDouble(4, price);
+                        itemStatement.setDouble(4, unitPrice); // Store the unit price for the item
 
                         itemStatement.executeUpdate();
                     }
@@ -463,8 +463,13 @@ public class MakePayment {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(frame, "An error occurred while processing your order. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, "Invalid number format in cart items. Please check your inputs.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
+
+
 
     private void addPlaceholder(JTextField textField, String placeholder) {
         textField.setForeground(Color.GRAY);
