@@ -78,7 +78,7 @@ public class SignInPage {
 	}
 	public void employeeSignInButton() {
 		JButton newCustomerButton = new JButton("Employee Sign in");
-		newCustomerButton.setBounds(95, 141, 310, 29);
+		newCustomerButton.setBounds(95, 182, 310, 29);
 		frmChooseSigninOption.getContentPane().add(newCustomerButton);
 		newCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +88,7 @@ public class SignInPage {
 	}
 	public void adminSignInButton() {
 		JButton newCustomerButton = new JButton("Admin Sign in");
-		newCustomerButton.setBounds(95, 182, 310, 29);
+		newCustomerButton.setBounds(95, 141, 310, 29);
 		frmChooseSigninOption.getContentPane().add(newCustomerButton);
 		
 		JLabel lblNewLabel = new JLabel("WELCOME!");
