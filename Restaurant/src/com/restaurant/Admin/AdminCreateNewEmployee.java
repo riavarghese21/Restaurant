@@ -3,6 +3,7 @@ package com.restaurant.Admin;
 import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -115,38 +116,31 @@ public class AdminCreateNewEmployee {
         AdminManageEmployees.setVisible(true);
     }
 	
-	public void addNewEmployee() {
-		try {
-			Connection connection = Database.connection;
-			String query = "INSERT INTO Employees (employee_username, employee_password, employee_name) VALUES (?, ?, ?)";
-			PreparedStatement stm = connection.prepareStatement(query);
-			String password = new String(passwordField.getPassword());
-			String encryptedPswd = Encryption.encrypt(password);
-			stm.setString(1, usernameTF.getText());
-			stm.setString(2, encryptedPswd);
-			stm.setString(3, fullNameTF.getText());
+    public void addNewEmployee() {
+        try {
+            Connection connection = Database.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(frame, "Database connection failed.", "Database Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-			stm.executeUpdate();
+            String query = "INSERT INTO Employees (employee_username, employee_password, employee_name, first_login) VALUES (?, ?, ?, TRUE)";
+            PreparedStatement stm = connection.prepareStatement(query);
+            
+            String password = new String(passwordField.getPassword());
+            String encryptedPswd = Encryption.encrypt(password);
+            
+            stm.setString(1, usernameTF.getText());
+            stm.setString(2, encryptedPswd);
+            stm.setString(3, fullNameTF.getText());
 
+            stm.executeUpdate();
 
-			
-//			String query2 = "CREATE USER ?@'localhost' IDENTIFIED BY ?";
-//			PreparedStatement stm2 = connection.prepareStatement(query2);
-//			stm2.setString(1, usernameTF.getText());
-//			stm2.setString(2, password);
-//
-//			stm2.executeUpdate();
-//			
-//			String query3 = "GRANT SELECT, UPDATE ON restaurantdb.Orders TO ?@'localhost'";
-//			PreparedStatement stm3 = connection.prepareStatement(query3);
-//			stm3.setString(1, usernameTF.getText());
-//			
-//			stm3.executeUpdate();
-			
-			
-			JOptionPane.showMessageDialog(null, "Account Created Successfully!", "", JOptionPane.DEFAULT_OPTION);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
+            JOptionPane.showMessageDialog(null, "Account Created Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "An error occurred while creating the account. Please try again.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
 }

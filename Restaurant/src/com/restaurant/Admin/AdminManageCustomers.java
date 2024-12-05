@@ -50,11 +50,11 @@ public class AdminManageCustomers {
 		JLabel lblManageCustomers = new JLabel("Manage Customers");
 		lblManageCustomers.setHorizontalAlignment(SwingConstants.CENTER);
 		lblManageCustomers.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-		lblManageCustomers.setBounds(75, 10, 310, 16);
+		lblManageCustomers.setBounds(75, 0, 310, 25);
 		frame.getContentPane().add(lblManageCustomers);
 
 		JButton deleteCustomerButton = new JButton("Delete Customer");
-		deleteCustomerButton.setBounds(72, 62, 310, 29);
+		deleteCustomerButton.setBounds(75, 27, 310, 29);
 		frame.getContentPane().add(deleteCustomerButton);
 		
 		deleteCustomerButton.addActionListener(new ActionListener() {
@@ -64,7 +64,7 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editUsernameButton = new JButton("Edit Username");
-		editUsernameButton.setBounds(75, 138, 310, 29);
+		editUsernameButton.setBounds(75, 142, 310, 29);
 		frame.getContentPane().add(editUsernameButton);
 		
 		editUsernameButton.addActionListener(new ActionListener() {
@@ -74,7 +74,7 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editPasswordButton = new JButton("Edit Password");
-		editPasswordButton.setBounds(75, 179, 310, 29);
+		editPasswordButton.setBounds(75, 180, 310, 29);
 		frame.getContentPane().add(editPasswordButton);
 		
 		editPasswordButton.addActionListener(new ActionListener() {
@@ -84,7 +84,7 @@ public class AdminManageCustomers {
 		});
 		
 		JButton editFullNameButton = new JButton("Edit Name");
-		editFullNameButton.setBounds(75, 99, 310, 29);
+		editFullNameButton.setBounds(75, 67, 310, 29);
 		frame.getContentPane().add(editFullNameButton);
 		
 		editFullNameButton.addActionListener(new ActionListener() {
@@ -92,6 +92,15 @@ public class AdminManageCustomers {
 				goToEditFullName();
 			}
 		});
+		JButton editAddressButton = new JButton("Edit Address");
+		editAddressButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				goToEditAddress();
+			}
+		});
+		editAddressButton.setBounds(75, 102, 310, 29);
+		frame.getContentPane().add(editAddressButton);
+		
         JButton backButton = new JButton("Back");
         backButton.setBounds(25, 220, 80, 25);
         frame.getContentPane().add(backButton);
@@ -132,6 +141,12 @@ public class AdminManageCustomers {
 		AdminEditCustomerFullName AECFN = new AdminEditCustomerFullName(); 
 		AECFN.initialize();
 		AECFN.frame.setVisible(true);
+	}
+	public void goToEditAddress() {
+		frame.dispose();
+		AdminEditCustomerAddress AECA = new AdminEditCustomerAddress(); 
+		AECA.initialize();
+		AECA.frame.setVisible(true);
 	}
 	public void setVisible(boolean visible) {
 		frame.setVisible(visible);

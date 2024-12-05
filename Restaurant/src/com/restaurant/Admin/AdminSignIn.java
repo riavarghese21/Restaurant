@@ -1,130 +1,132 @@
 package com.restaurant.Admin;
 
+import javax.swing.*;
+import com.restaurant.Database;
+import com.restaurant.Encryption;
+import com.restaurant.SignInPage;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import javax.swing.*;
-
-import com.restaurant.Database;
-import com.restaurant.SignInPage;
+import java.sql.SQLException;
 
 public class AdminSignIn {
 
-	public JFrame frame;
-	private static JTextField usernameTF;
-	private static JPasswordField pswdTF;
+    public JFrame frame;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdminSignIn window = new AdminSignIn();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                AdminSignIn window = new AdminSignIn();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public AdminSignIn() {
-		initialize();
-	}
+    /**
+     * Create the application.
+     */
+    public AdminSignIn() {
+        initialize();
+    }
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	public void initialize() {
-		frame = new JFrame("Admin Sign In");
+    /**
+     * Initialize the contents of the frame.
+     */
+    public void initialize() {
+        frame = new JFrame("Admin Sign In");
         frame.setBounds(100, 100, 400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
-		
-		signInButton();
-		
-		JLabel loginLabel = new JLabel("Admin Login");
+
+        JLabel loginLabel = new JLabel("Admin Login");
         loginLabel.setFont(new Font("Lucida Grande", Font.BOLD, 17));
-        loginLabel.setBounds(150, 21, 150, 30);
+        loginLabel.setBounds(129, 21, 150, 30);
         frame.getContentPane().add(loginLabel);
-		
-		usernameTF = new JTextField();
-		usernameTF.setBounds(139, 80, 180, 25);
-		frame.getContentPane().add(usernameTF);
-		usernameTF.setColumns(10);
-		
-		pswdTF = new JPasswordField();
-		pswdTF.setBounds(139, 120, 180, 25);
-		frame.getContentPane().add(pswdTF);
-		pswdTF.setColumns(10);
-		
-		JLabel usernameLBL = new JLabel("Username");
-		usernameLBL.setBounds(66, 81, 80, 25);
-		frame.getContentPane().add(usernameLBL);
-		
-		JLabel pswdLBL = new JLabel("Password");
-		pswdLBL.setBounds(66, 121, 80, 25);
-		frame.getContentPane().add(pswdLBL);
+
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setBounds(66, 81, 80, 25);
+        frame.getContentPane().add(usernameLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(139, 80, 180, 25);
+        frame.getContentPane().add(usernameField);
+        usernameField.setColumns(10);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setBounds(66, 121, 80, 25);
+        frame.getContentPane().add(passwordLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(139, 120, 180, 25);
+        frame.getContentPane().add(passwordField);
+        passwordField.setColumns(10);
+
+        JButton loginButton = new JButton("Login");
+        loginButton.setBounds(150, 170, 100, 30);
+        frame.getContentPane().add(loginButton);
+
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                loginAdmin();
+            }
+        });
 
         JButton backButton = new JButton("Back");
-        backButton.setBounds(25, 229, 80, 25);
+        backButton.setBounds(50, 220, 80, 25);
         frame.getContentPane().add(backButton);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 goToSignInPage();
             }
         });
-	}
+        
+    }
+    
     private void goToSignInPage() {
         frame.dispose();
         SignInPage signInPage = new SignInPage();
         signInPage.setVisible(true);
     }
-	public void signInButton() {
-		JButton signInBTN = new JButton("Sign-in");
-		signInBTN.setBounds(150, 170, 100, 30);
-		frame.getContentPane().add(signInBTN);
-		signInBTN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				connect();
-				//Add if statement so users with no account can't go to the page
-				goToAdminSignedIn();
-			}
-		});
-	}
-	public void goToAdminSignedIn() {
-		frame.dispose();
-		AdminSignedIn SIC = new AdminSignedIn(); 
-		SIC.initialize();
-		SIC.frame.setVisible(true);
-	}
+    	
 
-    public static void connect() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String databaseName = "restaurantdb";
-            String username = usernameTF.getText(); String password = new String(pswdTF.getPassword());
-            Database.connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?serverTimesone=EST", username, password);
-            System.out.println("Database connected successfully.");
-        } catch (SQLException e) {
-            System.out.println("Error connecting to database: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.out.println("MySQL Driver not found: " + e.getMessage());
+    private void loginAdmin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        String encryptedPassword = Encryption.encrypt(password);
+        
+        String adminUsername = "admin";
+        String adminPassword = "admin";
+        String expectedEncryptedPassword = Encryption.encrypt(adminPassword); 
+        
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (username.equals(adminUsername) && encryptedPassword.equals(expectedEncryptedPassword)) {
+            JOptionPane.showMessageDialog(frame, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            frame.dispose();
+
+            AdminSignedIn AdminSignedInPage = new AdminSignedIn();
+            AdminSignedInPage.frame.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
-	public void setVisible(boolean visible) {
-		frame.setVisible(visible);
+
+
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
     }
 }

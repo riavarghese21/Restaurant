@@ -117,7 +117,7 @@ public class EmployeeSignIn {
                 return;
             }
 
-            String query = "SELECT * FROM Employees WHERE Employee_username = ? AND Employee_password = ?";
+            String query = "SELECT * FROM Employees WHERE employee_username = ? AND employee_password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, encryptedPassword);
@@ -125,14 +125,21 @@ public class EmployeeSignIn {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                int EmployeeId = resultSet.getInt("Employee_id");
-                EmployeeSession.getInstance().setEmployeeId(EmployeeId);
+                int employeeId = resultSet.getInt("employee_id");
+                boolean firstLogin = resultSet.getBoolean("first_login");
 
+                EmployeeSession.getInstance().setEmployeeId(employeeId);
                 JOptionPane.showMessageDialog(frame, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
                 frame.dispose();
 
-                EmployeeMenu EmployeeSignedInPage = new EmployeeMenu();
-                EmployeeSignedInPage.frame.setVisible(true);
+                if (firstLogin) {
+                    EmployeeChangePassword changePasswordPage = new EmployeeChangePassword(employeeId);
+                    changePasswordPage.frame.setVisible(true);
+                } else {
+                    EmployeeMenu employeeSignedInPage = new EmployeeMenu();
+                    employeeSignedInPage.frame.setVisible(true);
+                }
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
             }
@@ -141,6 +148,7 @@ public class EmployeeSignIn {
             e.printStackTrace();
         }
     }
+
 
     public void setVisible(boolean visible) {
         frame.setVisible(visible);

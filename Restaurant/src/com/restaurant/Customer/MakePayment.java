@@ -194,7 +194,7 @@ public class MakePayment {
 
         // Load Saved Card Button
         JButton loadSavedCardButton = new JButton("Load Saved Card");
-        loadSavedCardButton.setBounds(360, 466, 117, 29);
+        loadSavedCardButton.setBounds(344, 466, 133, 29);
         frame.getContentPane().add(loadSavedCardButton);
         loadSavedCardButton.addActionListener(e -> loadSavedPaymentInfo());
 
