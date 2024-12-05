@@ -101,11 +101,6 @@ public class AdminManageCustomers {
 		editAddressButton.setBounds(75, 102, 310, 29);
 		frame.getContentPane().add(editAddressButton);
 		
-		editFullNameButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				goToEditAddress();
-			}
-		});
         JButton backButton = new JButton("Back");
         backButton.setBounds(25, 220, 80, 25);
         frame.getContentPane().add(backButton);
